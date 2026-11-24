@@ -212,6 +212,17 @@ html_template = """<!DOCTYPE html>
     </section>
 
     <section id="panel-releases" class="panel">
+      <div class="filters">
+        <select id="r-kind" aria-label="Filtrar por tipo de lançamento">
+          <option value="">Todos os tipos (Álbuns, EPs, Singles, Ao Vivo)</option>
+          <option value="álbum">Álbuns de Estúdio</option>
+          <option value="ep">EPs</option>
+          <option value="single">Singles</option>
+          <option value="ao_vivo">Ao Vivo</option>
+          <option value="coletânea">Coletâneas</option>
+        </select>
+        <input type="text" id="r-search" placeholder="Buscar lançamento ou faixa..." aria-label="Buscar lançamento" />
+      </div>
       <div class="metrics-grid" id="releases-grid"></div>
     </section>
 
@@ -339,26 +350,53 @@ html_template = """<!DOCTYPE html>
     });
     renderRelations();
 
-    // People
+    // People (organized: Antes / Durante / Depois)
     document.getElementById("people-grid").innerHTML = DB.people.map(p => `
       <div class="card">
         <h3>${p.name}</h3>
         <div class="subtitle">${p.membership} · ${(p.roles || []).join(", ")}</div>
-        <p style="font-size:0.88rem;margin:0.5rem 0 0;">${p.bio}</p>
+        <p style="font-size:0.86rem;margin:0.4rem 0;">${p.bio}</p>
+        ${p.career_phases ? `
+          <div style="font-size:0.82rem;border-top:1px solid var(--border);padding-top:0.45rem;margin-top:0.45rem;">
+            <div><strong>Antes:</strong> ${p.career_phases.antes}</div>
+            <div><strong>No Devo:</strong> ${p.career_phases.durante}</div>
+            <div><strong>Depois / Paralelos:</strong> ${p.career_phases.depois}</div>
+          </div>
+        ` : ""}
       </div>
     `).join("");
 
-    // Releases
-    document.getElementById("releases-grid").innerHTML = DB.releases.map(r => `
-      <div class="card">
-        <h3>${r.title} (${r.year})</h3>
-        <div class="subtitle">${r.kind} · ${r.tracks.length} faixas</div>
-        <ol style="font-size:0.82rem;padding-left:1.2rem;margin:0.5rem 0 0;">
-          ${r.tracks.slice(0, 6).map(t => `<li>${t}</li>`).join("")}
-          ${r.tracks.length > 6 ? `<li><em>+${r.tracks.length - 6} faixas</em></li>` : ""}
-        </ol>
-      </div>
-    `).join("");
+    // Releases with individual track YouTube + Lyrics links
+    const linkByTitle = Object.fromEntries(DB.links.map(l => [l.title.split(" — ")[0].toLowerCase(), l.url]));
+    const lyricByTitle = Object.fromEntries((DB.lyrics || []).map(l => [l.title.toLowerCase(), l.url]));
+    const rKind = document.getElementById("r-kind");
+    const rSearch = document.getElementById("r-search");
+
+    function renderReleases() {
+      const k = rKind.value;
+      const q = rSearch.value.trim().toLowerCase();
+      const filtered = DB.releases.filter(r => {
+        if (k && r.kind !== k) return false;
+        if (q && !r.title.toLowerCase().includes(q) && !r.tracks.some(t => t.toLowerCase().includes(q))) return false;
+        return true;
+      });
+      document.getElementById("releases-grid").innerHTML = filtered.map(r => `
+        <div class="card">
+          <h3>${r.title}</h3>
+          <div class="subtitle"><span class="badge">${r.kind}</span> · Data: ${r.date || r.year || "—"} · ${r.tracks.length} faixa(s)</div>
+          <ol style="font-size:0.82rem;padding-left:1.2rem;margin:0.5rem 0 0;">
+            ${r.tracks.map(t => {
+              const yt = linkByTitle[t.toLowerCase()];
+              const lyr = lyricByTitle[t.toLowerCase()];
+              return `<li>${t} ${yt ? `<a href="${yt}" target="_blank" rel="noopener">[Ouvir]</a>` : ""} ${lyr ? `<a href="${lyr}" target="_blank" rel="noopener">[Letra]</a>` : ""}</li>`;
+            }).join("")}
+          </ol>
+        </div>
+      `).join("");
+    }
+    rKind.addEventListener("change", renderReleases);
+    rSearch.addEventListener("input", renderReleases);
+    renderReleases();
 
     // Timeline
     document.getElementById("timeline-list").innerHTML = (DB.timeline || []).map(t => `
