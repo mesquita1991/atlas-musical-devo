@@ -1,0 +1,252 @@
+id,person_id,project_id,kind,grain,instrument,start,end,source_ids,evidence,status
+r_0001,p_mark,proj_devo,integrante,projeto,vocal/teclados,1973,1991,"[""s_wiki_devo"", ""s_mb_artist""]",Período oficial documentado (1973–1991) na formação do Devo.,confirmado
+r_0002,p_mark,proj_devo,integrante,projeto,vocal/teclados,1996,2026,"[""s_wiki_devo"", ""s_mb_artist""]",Período oficial documentado (1996–2026) na formação do Devo.,confirmado
+r_0003,p_jerry,proj_devo,integrante,projeto,baixo/vocal,1973,1991,"[""s_wiki_devo"", ""s_mb_artist""]",Período oficial documentado (1973–1991) na formação do Devo.,confirmado
+r_0004,p_jerry,proj_devo,integrante,projeto,baixo/vocal,1996,2026,"[""s_wiki_devo"", ""s_mb_artist""]",Período oficial documentado (1996–2026) na formação do Devo.,confirmado
+r_0005,p_bob1,proj_devo,integrante,projeto,guitarra solo,1974,1991,"[""s_wiki_devo"", ""s_mb_artist""]",Período oficial documentado (1974–1991) na formação do Devo.,confirmado
+r_0006,p_bob1,proj_devo,integrante,projeto,guitarra solo,1996,2026,"[""s_wiki_devo"", ""s_mb_artist""]",Período oficial documentado (1996–2026) na formação do Devo.,confirmado
+r_0007,p_bob2,proj_devo,integrante,projeto,guitarra base/teclados,1973,1974,"[""s_wiki_devo"", ""s_mb_artist""]",Período oficial documentado (1973–1974) na formação do Devo.,confirmado
+r_0008,p_bob2,proj_devo,integrante,projeto,guitarra base/teclados,1976,1991,"[""s_wiki_devo"", ""s_mb_artist""]",Período oficial documentado (1976–1991) na formação do Devo.,confirmado
+r_0009,p_bob2,proj_devo,integrante,projeto,guitarra base/teclados,1996,2014,"[""s_wiki_devo"", ""s_mb_artist""]",Período oficial documentado (1996–2014) na formação do Devo.,confirmado
+r_0010,p_alan,proj_devo,integrante,projeto,bateria,1976,1986,"[""s_wiki_devo"", ""s_mb_artist""]",Período oficial documentado (1976–1986) na formação do Devo.,confirmado
+r_0011,p_david,proj_devo,integrante,projeto,bateria,1987,1991,"[""s_wiki_devo"", ""s_mb_artist""]",Período oficial documentado (1987–1991) na formação do Devo.,confirmado
+r_0012,p_david,proj_devo,integrante,projeto,bateria,1996,2004,"[""s_wiki_devo"", ""s_mb_artist""]",Período oficial documentado (1996–2004) na formação do Devo.,confirmado
+r_0013,p_joshf,proj_devo,integrante,projeto,bateria,1996,2026,"[""s_wiki_devo"", ""s_mb_artist""]",Período oficial documentado (1996–2026) na formação do Devo.,confirmado
+r_0014,p_joshh,proj_devo,integrante,projeto,guitarra base/teclados,2014,2026,"[""s_wiki_devo"", ""s_mb_artist""]",Período oficial documentado (2014–2026) na formação do Devo.,confirmado
+r_0015,p_bobl,proj_devo,integrante,projeto,guitarra,1973,1974,"[""s_wiki_devo"", ""s_mb_artist""]",Período oficial documentado (1973–1974) na formação do Devo.,confirmado
+r_0016,p_jimm,proj_devo,integrante,projeto,bateria eletrônica,1974,1975,"[""s_wiki_devo"", ""s_mb_artist""]",Período oficial documentado (1974–1975) na formação do Devo.,confirmado
+r_0017,p_rod,proj_devo,integrante,projeto,bateria,1973,1973,"[""s_wiki_devo"", ""s_mb_artist""]",Período oficial documentado (1973–1973) na formação do Devo.,confirmado
+r_0018,p_fred,proj_devo,integrante,projeto,vocal,1973,1973,"[""s_wiki_devo"", ""s_mb_artist""]",Período oficial documentado (1973–1973) na formação do Devo.,confirmado
+r_0019,p_mark,proj_mutato,fundador,projeto,composição/produção,1989,2026,"[""s_wiki_devo""]",Fundador da produtora Mutato Muzika.,confirmado
+r_0020,p_jerry,proj_jihad,solo,projeto,vocal/baixo,2006,2006,"[""s_wiki_devo""]",Projeto solo Jihad Jerry & the Evildoers (2006).,confirmado
+r_0021,p_mark,proj_wipeouters,integrante,projeto,teclados/guitarra,2001,2001,"[""s_wiki_devo""]",Projeto paralelo surf-rock The Wipeouters (2001).,confirmado
+r_0022,p_bob1,proj_wipeouters,integrante,projeto,guitarra,2001,2001,"[""s_wiki_devo""]",Projeto paralelo surf-rock The Wipeouters (2001).,confirmado
+r_0023,p_bob2,proj_wipeouters,integrante,projeto,guitarra,2001,2001,"[""s_wiki_devo""]",Projeto paralelo surf-rock The Wipeouters (2001).,confirmado
+r_0024,p_joshf,proj_vandals,integrante,projeto,bateria,1989,2026,"[""s_wiki_devo""]",Baterista de longa data do The Vandals.,confirmado
+r_0025,p_joshf,proj_apc,integrante,projeto,bateria,1999,2012,"[""s_wiki_devo""]",Baterista do A Perfect Circle.,confirmado
+r_0026,p_david,proj_sparks,integrante,projeto,bateria,1981,1986,"[""s_wiki_devo""]",Baterista do Sparks antes de ingressar no Devo.,confirmado
+r_0027,p_david,proj_gleaming,integrante,projeto,bateria,1980,1988,"[""s_wiki_devo""]",Integrante do Gleaming Spires.,confirmado
+r_0028,p_alan,proj_ponty,integrante,projeto,bateria,1987,1989,"[""s_wiki_devo""]",Colaboração com Jean-Luc Ponty após saída do Devo.,confirmado
+r_0029,p_joshh,proj_elevator,integrante,projeto,guitarra/vocal,1994,2001,"[""s_wiki_devo""]",Integrante do The Elevator Drops.,confirmado
+r_0030,p_eno,proj_alb_1,produção,lançamento,produção,1978,1978,"[""s_discogs"", ""s_wiki_discog""]",Produção creditada no álbum Q: Are We Not Men? A: We Are Devo! (1978).,confirmado
+r_0031,p_mark,proj_trk_1_1,intérprete,faixa,vocal/teclados,1978,1978,"[""s_mb_rgs""]",Faixa de Q: Are We Not Men? A: We Are Devo! (1978) registrada no MusicBrainz.,confirmado
+r_0032,p_jerry,proj_trk_1_1,intérprete,faixa,baixo/vocal,1978,1978,"[""s_mb_rgs""]",Faixa de Q: Are We Not Men? A: We Are Devo! (1978) registrada no MusicBrainz.,confirmado
+r_0033,p_mark,proj_trk_1_2,intérprete,faixa,vocal/teclados,1978,1978,"[""s_mb_rgs""]",Faixa de Q: Are We Not Men? A: We Are Devo! (1978) registrada no MusicBrainz.,confirmado
+r_0034,p_jerry,proj_trk_1_2,intérprete,faixa,baixo/vocal,1978,1978,"[""s_mb_rgs""]",Faixa de Q: Are We Not Men? A: We Are Devo! (1978) registrada no MusicBrainz.,confirmado
+r_0035,p_mark,proj_trk_1_3,intérprete,faixa,vocal/teclados,1978,1978,"[""s_mb_rgs""]",Faixa de Q: Are We Not Men? A: We Are Devo! (1978) registrada no MusicBrainz.,confirmado
+r_0036,p_jerry,proj_trk_1_3,intérprete,faixa,baixo/vocal,1978,1978,"[""s_mb_rgs""]",Faixa de Q: Are We Not Men? A: We Are Devo! (1978) registrada no MusicBrainz.,confirmado
+r_0037,p_mark,proj_trk_1_4,intérprete,faixa,vocal/teclados,1978,1978,"[""s_mb_rgs""]",Faixa de Q: Are We Not Men? A: We Are Devo! (1978) registrada no MusicBrainz.,confirmado
+r_0038,p_jerry,proj_trk_1_4,intérprete,faixa,baixo/vocal,1978,1978,"[""s_mb_rgs""]",Faixa de Q: Are We Not Men? A: We Are Devo! (1978) registrada no MusicBrainz.,confirmado
+r_0039,p_mark,proj_trk_1_5,intérprete,faixa,vocal/teclados,1978,1978,"[""s_mb_rgs""]",Faixa de Q: Are We Not Men? A: We Are Devo! (1978) registrada no MusicBrainz.,confirmado
+r_0040,p_jerry,proj_trk_1_5,intérprete,faixa,baixo/vocal,1978,1978,"[""s_mb_rgs""]",Faixa de Q: Are We Not Men? A: We Are Devo! (1978) registrada no MusicBrainz.,confirmado
+r_0041,p_mark,proj_trk_1_6,intérprete,faixa,vocal/teclados,1978,1978,"[""s_mb_rgs""]",Faixa de Q: Are We Not Men? A: We Are Devo! (1978) registrada no MusicBrainz.,confirmado
+r_0042,p_jerry,proj_trk_1_6,intérprete,faixa,baixo/vocal,1978,1978,"[""s_mb_rgs""]",Faixa de Q: Are We Not Men? A: We Are Devo! (1978) registrada no MusicBrainz.,confirmado
+r_0043,p_mark,proj_trk_1_7,intérprete,faixa,vocal/teclados,1978,1978,"[""s_mb_rgs""]",Faixa de Q: Are We Not Men? A: We Are Devo! (1978) registrada no MusicBrainz.,confirmado
+r_0044,p_jerry,proj_trk_1_7,intérprete,faixa,baixo/vocal,1978,1978,"[""s_mb_rgs""]",Faixa de Q: Are We Not Men? A: We Are Devo! (1978) registrada no MusicBrainz.,confirmado
+r_0045,p_mark,proj_trk_1_8,intérprete,faixa,vocal/teclados,1978,1978,"[""s_mb_rgs""]",Faixa de Q: Are We Not Men? A: We Are Devo! (1978) registrada no MusicBrainz.,confirmado
+r_0046,p_jerry,proj_trk_1_8,intérprete,faixa,baixo/vocal,1978,1978,"[""s_mb_rgs""]",Faixa de Q: Are We Not Men? A: We Are Devo! (1978) registrada no MusicBrainz.,confirmado
+r_0047,p_mark,proj_trk_1_9,intérprete,faixa,vocal/teclados,1978,1978,"[""s_mb_rgs""]",Faixa de Q: Are We Not Men? A: We Are Devo! (1978) registrada no MusicBrainz.,confirmado
+r_0048,p_jerry,proj_trk_1_9,intérprete,faixa,baixo/vocal,1978,1978,"[""s_mb_rgs""]",Faixa de Q: Are We Not Men? A: We Are Devo! (1978) registrada no MusicBrainz.,confirmado
+r_0049,p_mark,proj_trk_1_10,intérprete,faixa,vocal/teclados,1978,1978,"[""s_mb_rgs""]",Faixa de Q: Are We Not Men? A: We Are Devo! (1978) registrada no MusicBrainz.,confirmado
+r_0050,p_jerry,proj_trk_1_10,intérprete,faixa,baixo/vocal,1978,1978,"[""s_mb_rgs""]",Faixa de Q: Are We Not Men? A: We Are Devo! (1978) registrada no MusicBrainz.,confirmado
+r_0051,p_mark,proj_trk_1_11,intérprete,faixa,vocal/teclados,1978,1978,"[""s_mb_rgs""]",Faixa de Q: Are We Not Men? A: We Are Devo! (1978) registrada no MusicBrainz.,confirmado
+r_0052,p_jerry,proj_trk_1_11,intérprete,faixa,baixo/vocal,1978,1978,"[""s_mb_rgs""]",Faixa de Q: Are We Not Men? A: We Are Devo! (1978) registrada no MusicBrainz.,confirmado
+r_0053,p_kenscott,proj_alb_2,produção,lançamento,produção,1979,1979,"[""s_discogs"", ""s_wiki_discog""]",Produção creditada no álbum Duty Now for the Future (1979).,confirmado
+r_0054,p_mark,proj_trk_2_1,intérprete,faixa,vocal/teclados,1979,1979,"[""s_mb_rgs""]",Faixa de Duty Now for the Future (1979) registrada no MusicBrainz.,confirmado
+r_0055,p_jerry,proj_trk_2_1,intérprete,faixa,baixo/vocal,1979,1979,"[""s_mb_rgs""]",Faixa de Duty Now for the Future (1979) registrada no MusicBrainz.,confirmado
+r_0056,p_mark,proj_trk_2_2,intérprete,faixa,vocal/teclados,1979,1979,"[""s_mb_rgs""]",Faixa de Duty Now for the Future (1979) registrada no MusicBrainz.,confirmado
+r_0057,p_jerry,proj_trk_2_2,intérprete,faixa,baixo/vocal,1979,1979,"[""s_mb_rgs""]",Faixa de Duty Now for the Future (1979) registrada no MusicBrainz.,confirmado
+r_0058,p_mark,proj_trk_2_3,intérprete,faixa,vocal/teclados,1979,1979,"[""s_mb_rgs""]",Faixa de Duty Now for the Future (1979) registrada no MusicBrainz.,confirmado
+r_0059,p_jerry,proj_trk_2_3,intérprete,faixa,baixo/vocal,1979,1979,"[""s_mb_rgs""]",Faixa de Duty Now for the Future (1979) registrada no MusicBrainz.,confirmado
+r_0060,p_mark,proj_trk_2_4,intérprete,faixa,vocal/teclados,1979,1979,"[""s_mb_rgs""]",Faixa de Duty Now for the Future (1979) registrada no MusicBrainz.,confirmado
+r_0061,p_jerry,proj_trk_2_4,intérprete,faixa,baixo/vocal,1979,1979,"[""s_mb_rgs""]",Faixa de Duty Now for the Future (1979) registrada no MusicBrainz.,confirmado
+r_0062,p_mark,proj_trk_2_5,intérprete,faixa,vocal/teclados,1979,1979,"[""s_mb_rgs""]",Faixa de Duty Now for the Future (1979) registrada no MusicBrainz.,confirmado
+r_0063,p_jerry,proj_trk_2_5,intérprete,faixa,baixo/vocal,1979,1979,"[""s_mb_rgs""]",Faixa de Duty Now for the Future (1979) registrada no MusicBrainz.,confirmado
+r_0064,p_mark,proj_trk_2_6,intérprete,faixa,vocal/teclados,1979,1979,"[""s_mb_rgs""]",Faixa de Duty Now for the Future (1979) registrada no MusicBrainz.,confirmado
+r_0065,p_jerry,proj_trk_2_6,intérprete,faixa,baixo/vocal,1979,1979,"[""s_mb_rgs""]",Faixa de Duty Now for the Future (1979) registrada no MusicBrainz.,confirmado
+r_0066,p_mark,proj_trk_2_7,intérprete,faixa,vocal/teclados,1979,1979,"[""s_mb_rgs""]",Faixa de Duty Now for the Future (1979) registrada no MusicBrainz.,confirmado
+r_0067,p_jerry,proj_trk_2_7,intérprete,faixa,baixo/vocal,1979,1979,"[""s_mb_rgs""]",Faixa de Duty Now for the Future (1979) registrada no MusicBrainz.,confirmado
+r_0068,p_mark,proj_trk_2_8,intérprete,faixa,vocal/teclados,1979,1979,"[""s_mb_rgs""]",Faixa de Duty Now for the Future (1979) registrada no MusicBrainz.,confirmado
+r_0069,p_jerry,proj_trk_2_8,intérprete,faixa,baixo/vocal,1979,1979,"[""s_mb_rgs""]",Faixa de Duty Now for the Future (1979) registrada no MusicBrainz.,confirmado
+r_0070,p_mark,proj_trk_2_9,intérprete,faixa,vocal/teclados,1979,1979,"[""s_mb_rgs""]",Faixa de Duty Now for the Future (1979) registrada no MusicBrainz.,confirmado
+r_0071,p_jerry,proj_trk_2_9,intérprete,faixa,baixo/vocal,1979,1979,"[""s_mb_rgs""]",Faixa de Duty Now for the Future (1979) registrada no MusicBrainz.,confirmado
+r_0072,p_mark,proj_trk_2_10,intérprete,faixa,vocal/teclados,1979,1979,"[""s_mb_rgs""]",Faixa de Duty Now for the Future (1979) registrada no MusicBrainz.,confirmado
+r_0073,p_jerry,proj_trk_2_10,intérprete,faixa,baixo/vocal,1979,1979,"[""s_mb_rgs""]",Faixa de Duty Now for the Future (1979) registrada no MusicBrainz.,confirmado
+r_0074,p_mark,proj_trk_2_11,intérprete,faixa,vocal/teclados,1979,1979,"[""s_mb_rgs""]",Faixa de Duty Now for the Future (1979) registrada no MusicBrainz.,confirmado
+r_0075,p_jerry,proj_trk_2_11,intérprete,faixa,baixo/vocal,1979,1979,"[""s_mb_rgs""]",Faixa de Duty Now for the Future (1979) registrada no MusicBrainz.,confirmado
+r_0076,p_mark,proj_trk_2_12,intérprete,faixa,vocal/teclados,1979,1979,"[""s_mb_rgs""]",Faixa de Duty Now for the Future (1979) registrada no MusicBrainz.,confirmado
+r_0077,p_jerry,proj_trk_2_12,intérprete,faixa,baixo/vocal,1979,1979,"[""s_mb_rgs""]",Faixa de Duty Now for the Future (1979) registrada no MusicBrainz.,confirmado
+r_0078,p_mark,proj_trk_2_13,intérprete,faixa,vocal/teclados,1979,1979,"[""s_mb_rgs""]",Faixa de Duty Now for the Future (1979) registrada no MusicBrainz.,confirmado
+r_0079,p_jerry,proj_trk_2_13,intérprete,faixa,baixo/vocal,1979,1979,"[""s_mb_rgs""]",Faixa de Duty Now for the Future (1979) registrada no MusicBrainz.,confirmado
+r_0080,p_margouleff,proj_alb_3,produção,lançamento,produção,1980,1980,"[""s_discogs"", ""s_wiki_discog""]",Produção creditada no álbum Freedom of Choice (1980).,confirmado
+r_0081,p_mark,proj_trk_3_1,intérprete,faixa,vocal/teclados,1980,1980,"[""s_mb_rgs""]",Faixa de Freedom of Choice (1980) registrada no MusicBrainz.,confirmado
+r_0082,p_jerry,proj_trk_3_1,intérprete,faixa,baixo/vocal,1980,1980,"[""s_mb_rgs""]",Faixa de Freedom of Choice (1980) registrada no MusicBrainz.,confirmado
+r_0083,p_mark,proj_trk_3_2,intérprete,faixa,vocal/teclados,1980,1980,"[""s_mb_rgs""]",Faixa de Freedom of Choice (1980) registrada no MusicBrainz.,confirmado
+r_0084,p_jerry,proj_trk_3_2,intérprete,faixa,baixo/vocal,1980,1980,"[""s_mb_rgs""]",Faixa de Freedom of Choice (1980) registrada no MusicBrainz.,confirmado
+r_0085,p_mark,proj_trk_3_3,intérprete,faixa,vocal/teclados,1980,1980,"[""s_mb_rgs""]",Faixa de Freedom of Choice (1980) registrada no MusicBrainz.,confirmado
+r_0086,p_jerry,proj_trk_3_3,intérprete,faixa,baixo/vocal,1980,1980,"[""s_mb_rgs""]",Faixa de Freedom of Choice (1980) registrada no MusicBrainz.,confirmado
+r_0087,p_mark,proj_trk_3_4,intérprete,faixa,vocal/teclados,1980,1980,"[""s_mb_rgs""]",Faixa de Freedom of Choice (1980) registrada no MusicBrainz.,confirmado
+r_0088,p_jerry,proj_trk_3_4,intérprete,faixa,baixo/vocal,1980,1980,"[""s_mb_rgs""]",Faixa de Freedom of Choice (1980) registrada no MusicBrainz.,confirmado
+r_0089,p_mark,proj_trk_3_5,intérprete,faixa,vocal/teclados,1980,1980,"[""s_mb_rgs""]",Faixa de Freedom of Choice (1980) registrada no MusicBrainz.,confirmado
+r_0090,p_jerry,proj_trk_3_5,intérprete,faixa,baixo/vocal,1980,1980,"[""s_mb_rgs""]",Faixa de Freedom of Choice (1980) registrada no MusicBrainz.,confirmado
+r_0091,p_mark,proj_trk_3_6,intérprete,faixa,vocal/teclados,1980,1980,"[""s_mb_rgs""]",Faixa de Freedom of Choice (1980) registrada no MusicBrainz.,confirmado
+r_0092,p_jerry,proj_trk_3_6,intérprete,faixa,baixo/vocal,1980,1980,"[""s_mb_rgs""]",Faixa de Freedom of Choice (1980) registrada no MusicBrainz.,confirmado
+r_0093,p_mark,proj_trk_3_7,intérprete,faixa,vocal/teclados,1980,1980,"[""s_mb_rgs""]",Faixa de Freedom of Choice (1980) registrada no MusicBrainz.,confirmado
+r_0094,p_jerry,proj_trk_3_7,intérprete,faixa,baixo/vocal,1980,1980,"[""s_mb_rgs""]",Faixa de Freedom of Choice (1980) registrada no MusicBrainz.,confirmado
+r_0095,p_mark,proj_trk_3_8,intérprete,faixa,vocal/teclados,1980,1980,"[""s_mb_rgs""]",Faixa de Freedom of Choice (1980) registrada no MusicBrainz.,confirmado
+r_0096,p_jerry,proj_trk_3_8,intérprete,faixa,baixo/vocal,1980,1980,"[""s_mb_rgs""]",Faixa de Freedom of Choice (1980) registrada no MusicBrainz.,confirmado
+r_0097,p_mark,proj_trk_3_9,intérprete,faixa,vocal/teclados,1980,1980,"[""s_mb_rgs""]",Faixa de Freedom of Choice (1980) registrada no MusicBrainz.,confirmado
+r_0098,p_jerry,proj_trk_3_9,intérprete,faixa,baixo/vocal,1980,1980,"[""s_mb_rgs""]",Faixa de Freedom of Choice (1980) registrada no MusicBrainz.,confirmado
+r_0099,p_mark,proj_trk_3_10,intérprete,faixa,vocal/teclados,1980,1980,"[""s_mb_rgs""]",Faixa de Freedom of Choice (1980) registrada no MusicBrainz.,confirmado
+r_0100,p_jerry,proj_trk_3_10,intérprete,faixa,baixo/vocal,1980,1980,"[""s_mb_rgs""]",Faixa de Freedom of Choice (1980) registrada no MusicBrainz.,confirmado
+r_0101,p_mark,proj_trk_3_11,intérprete,faixa,vocal/teclados,1980,1980,"[""s_mb_rgs""]",Faixa de Freedom of Choice (1980) registrada no MusicBrainz.,confirmado
+r_0102,p_jerry,proj_trk_3_11,intérprete,faixa,baixo/vocal,1980,1980,"[""s_mb_rgs""]",Faixa de Freedom of Choice (1980) registrada no MusicBrainz.,confirmado
+r_0103,p_mark,proj_trk_3_12,intérprete,faixa,vocal/teclados,1980,1980,"[""s_mb_rgs""]",Faixa de Freedom of Choice (1980) registrada no MusicBrainz.,confirmado
+r_0104,p_jerry,proj_trk_3_12,intérprete,faixa,baixo/vocal,1980,1980,"[""s_mb_rgs""]",Faixa de Freedom of Choice (1980) registrada no MusicBrainz.,confirmado
+r_0105,p_mark,proj_trk_4_1,intérprete,faixa,vocal/teclados,1981,1981,"[""s_mb_rgs""]",Faixa de New Traditionalists (1981) registrada no MusicBrainz.,confirmado
+r_0106,p_jerry,proj_trk_4_1,intérprete,faixa,baixo/vocal,1981,1981,"[""s_mb_rgs""]",Faixa de New Traditionalists (1981) registrada no MusicBrainz.,confirmado
+r_0107,p_mark,proj_trk_4_2,intérprete,faixa,vocal/teclados,1981,1981,"[""s_mb_rgs""]",Faixa de New Traditionalists (1981) registrada no MusicBrainz.,confirmado
+r_0108,p_jerry,proj_trk_4_2,intérprete,faixa,baixo/vocal,1981,1981,"[""s_mb_rgs""]",Faixa de New Traditionalists (1981) registrada no MusicBrainz.,confirmado
+r_0109,p_mark,proj_trk_4_3,intérprete,faixa,vocal/teclados,1981,1981,"[""s_mb_rgs""]",Faixa de New Traditionalists (1981) registrada no MusicBrainz.,confirmado
+r_0110,p_jerry,proj_trk_4_3,intérprete,faixa,baixo/vocal,1981,1981,"[""s_mb_rgs""]",Faixa de New Traditionalists (1981) registrada no MusicBrainz.,confirmado
+r_0111,p_mark,proj_trk_4_4,intérprete,faixa,vocal/teclados,1981,1981,"[""s_mb_rgs""]",Faixa de New Traditionalists (1981) registrada no MusicBrainz.,confirmado
+r_0112,p_jerry,proj_trk_4_4,intérprete,faixa,baixo/vocal,1981,1981,"[""s_mb_rgs""]",Faixa de New Traditionalists (1981) registrada no MusicBrainz.,confirmado
+r_0113,p_mark,proj_trk_4_5,intérprete,faixa,vocal/teclados,1981,1981,"[""s_mb_rgs""]",Faixa de New Traditionalists (1981) registrada no MusicBrainz.,confirmado
+r_0114,p_jerry,proj_trk_4_5,intérprete,faixa,baixo/vocal,1981,1981,"[""s_mb_rgs""]",Faixa de New Traditionalists (1981) registrada no MusicBrainz.,confirmado
+r_0115,p_mark,proj_trk_4_6,intérprete,faixa,vocal/teclados,1981,1981,"[""s_mb_rgs""]",Faixa de New Traditionalists (1981) registrada no MusicBrainz.,confirmado
+r_0116,p_jerry,proj_trk_4_6,intérprete,faixa,baixo/vocal,1981,1981,"[""s_mb_rgs""]",Faixa de New Traditionalists (1981) registrada no MusicBrainz.,confirmado
+r_0117,p_mark,proj_trk_4_7,intérprete,faixa,vocal/teclados,1981,1981,"[""s_mb_rgs""]",Faixa de New Traditionalists (1981) registrada no MusicBrainz.,confirmado
+r_0118,p_jerry,proj_trk_4_7,intérprete,faixa,baixo/vocal,1981,1981,"[""s_mb_rgs""]",Faixa de New Traditionalists (1981) registrada no MusicBrainz.,confirmado
+r_0119,p_mark,proj_trk_4_8,intérprete,faixa,vocal/teclados,1981,1981,"[""s_mb_rgs""]",Faixa de New Traditionalists (1981) registrada no MusicBrainz.,confirmado
+r_0120,p_jerry,proj_trk_4_8,intérprete,faixa,baixo/vocal,1981,1981,"[""s_mb_rgs""]",Faixa de New Traditionalists (1981) registrada no MusicBrainz.,confirmado
+r_0121,p_mark,proj_trk_4_9,intérprete,faixa,vocal/teclados,1981,1981,"[""s_mb_rgs""]",Faixa de New Traditionalists (1981) registrada no MusicBrainz.,confirmado
+r_0122,p_jerry,proj_trk_4_9,intérprete,faixa,baixo/vocal,1981,1981,"[""s_mb_rgs""]",Faixa de New Traditionalists (1981) registrada no MusicBrainz.,confirmado
+r_0123,p_mark,proj_trk_4_10,intérprete,faixa,vocal/teclados,1981,1981,"[""s_mb_rgs""]",Faixa de New Traditionalists (1981) registrada no MusicBrainz.,confirmado
+r_0124,p_jerry,proj_trk_4_10,intérprete,faixa,baixo/vocal,1981,1981,"[""s_mb_rgs""]",Faixa de New Traditionalists (1981) registrada no MusicBrainz.,confirmado
+r_0125,p_mark,proj_trk_4_11,intérprete,faixa,vocal/teclados,1981,1981,"[""s_mb_rgs""]",Faixa de New Traditionalists (1981) registrada no MusicBrainz.,confirmado
+r_0126,p_jerry,proj_trk_4_11,intérprete,faixa,baixo/vocal,1981,1981,"[""s_mb_rgs""]",Faixa de New Traditionalists (1981) registrada no MusicBrainz.,confirmado
+r_0127,p_mark,proj_trk_4_12,intérprete,faixa,vocal/teclados,1981,1981,"[""s_mb_rgs""]",Faixa de New Traditionalists (1981) registrada no MusicBrainz.,confirmado
+r_0128,p_jerry,proj_trk_4_12,intérprete,faixa,baixo/vocal,1981,1981,"[""s_mb_rgs""]",Faixa de New Traditionalists (1981) registrada no MusicBrainz.,confirmado
+r_0129,p_rtb,proj_alb_5,produção,lançamento,produção,1982,1982,"[""s_discogs"", ""s_wiki_discog""]","Produção creditada no álbum Oh, No! It's Devo (1982).",confirmado
+r_0130,p_mark,proj_trk_5_1,intérprete,faixa,vocal/teclados,1982,1982,"[""s_mb_rgs""]","Faixa de Oh, No! It's Devo (1982) registrada no MusicBrainz.",confirmado
+r_0131,p_jerry,proj_trk_5_1,intérprete,faixa,baixo/vocal,1982,1982,"[""s_mb_rgs""]","Faixa de Oh, No! It's Devo (1982) registrada no MusicBrainz.",confirmado
+r_0132,p_mark,proj_trk_5_2,intérprete,faixa,vocal/teclados,1982,1982,"[""s_mb_rgs""]","Faixa de Oh, No! It's Devo (1982) registrada no MusicBrainz.",confirmado
+r_0133,p_jerry,proj_trk_5_2,intérprete,faixa,baixo/vocal,1982,1982,"[""s_mb_rgs""]","Faixa de Oh, No! It's Devo (1982) registrada no MusicBrainz.",confirmado
+r_0134,p_mark,proj_trk_5_3,intérprete,faixa,vocal/teclados,1982,1982,"[""s_mb_rgs""]","Faixa de Oh, No! It's Devo (1982) registrada no MusicBrainz.",confirmado
+r_0135,p_jerry,proj_trk_5_3,intérprete,faixa,baixo/vocal,1982,1982,"[""s_mb_rgs""]","Faixa de Oh, No! It's Devo (1982) registrada no MusicBrainz.",confirmado
+r_0136,p_mark,proj_trk_5_4,intérprete,faixa,vocal/teclados,1982,1982,"[""s_mb_rgs""]","Faixa de Oh, No! It's Devo (1982) registrada no MusicBrainz.",confirmado
+r_0137,p_jerry,proj_trk_5_4,intérprete,faixa,baixo/vocal,1982,1982,"[""s_mb_rgs""]","Faixa de Oh, No! It's Devo (1982) registrada no MusicBrainz.",confirmado
+r_0138,p_mark,proj_trk_5_5,intérprete,faixa,vocal/teclados,1982,1982,"[""s_mb_rgs""]","Faixa de Oh, No! It's Devo (1982) registrada no MusicBrainz.",confirmado
+r_0139,p_jerry,proj_trk_5_5,intérprete,faixa,baixo/vocal,1982,1982,"[""s_mb_rgs""]","Faixa de Oh, No! It's Devo (1982) registrada no MusicBrainz.",confirmado
+r_0140,p_mark,proj_trk_5_6,intérprete,faixa,vocal/teclados,1982,1982,"[""s_mb_rgs""]","Faixa de Oh, No! It's Devo (1982) registrada no MusicBrainz.",confirmado
+r_0141,p_jerry,proj_trk_5_6,intérprete,faixa,baixo/vocal,1982,1982,"[""s_mb_rgs""]","Faixa de Oh, No! It's Devo (1982) registrada no MusicBrainz.",confirmado
+r_0142,p_mark,proj_trk_5_7,intérprete,faixa,vocal/teclados,1982,1982,"[""s_mb_rgs""]","Faixa de Oh, No! It's Devo (1982) registrada no MusicBrainz.",confirmado
+r_0143,p_jerry,proj_trk_5_7,intérprete,faixa,baixo/vocal,1982,1982,"[""s_mb_rgs""]","Faixa de Oh, No! It's Devo (1982) registrada no MusicBrainz.",confirmado
+r_0144,p_mark,proj_trk_5_8,intérprete,faixa,vocal/teclados,1982,1982,"[""s_mb_rgs""]","Faixa de Oh, No! It's Devo (1982) registrada no MusicBrainz.",confirmado
+r_0145,p_jerry,proj_trk_5_8,intérprete,faixa,baixo/vocal,1982,1982,"[""s_mb_rgs""]","Faixa de Oh, No! It's Devo (1982) registrada no MusicBrainz.",confirmado
+r_0146,p_mark,proj_trk_5_9,intérprete,faixa,vocal/teclados,1982,1982,"[""s_mb_rgs""]","Faixa de Oh, No! It's Devo (1982) registrada no MusicBrainz.",confirmado
+r_0147,p_jerry,proj_trk_5_9,intérprete,faixa,baixo/vocal,1982,1982,"[""s_mb_rgs""]","Faixa de Oh, No! It's Devo (1982) registrada no MusicBrainz.",confirmado
+r_0148,p_mark,proj_trk_5_10,intérprete,faixa,vocal/teclados,1982,1982,"[""s_mb_rgs""]","Faixa de Oh, No! It's Devo (1982) registrada no MusicBrainz.",confirmado
+r_0149,p_jerry,proj_trk_5_10,intérprete,faixa,baixo/vocal,1982,1982,"[""s_mb_rgs""]","Faixa de Oh, No! It's Devo (1982) registrada no MusicBrainz.",confirmado
+r_0150,p_mark,proj_trk_5_11,intérprete,faixa,vocal/teclados,1982,1982,"[""s_mb_rgs""]","Faixa de Oh, No! It's Devo (1982) registrada no MusicBrainz.",confirmado
+r_0151,p_jerry,proj_trk_5_11,intérprete,faixa,baixo/vocal,1982,1982,"[""s_mb_rgs""]","Faixa de Oh, No! It's Devo (1982) registrada no MusicBrainz.",confirmado
+r_0152,p_mark,proj_trk_6_1,intérprete,faixa,vocal/teclados,1984,1984,"[""s_mb_rgs""]",Faixa de Shout (1984) registrada no MusicBrainz.,confirmado
+r_0153,p_jerry,proj_trk_6_1,intérprete,faixa,baixo/vocal,1984,1984,"[""s_mb_rgs""]",Faixa de Shout (1984) registrada no MusicBrainz.,confirmado
+r_0154,p_mark,proj_trk_6_2,intérprete,faixa,vocal/teclados,1984,1984,"[""s_mb_rgs""]",Faixa de Shout (1984) registrada no MusicBrainz.,confirmado
+r_0155,p_jerry,proj_trk_6_2,intérprete,faixa,baixo/vocal,1984,1984,"[""s_mb_rgs""]",Faixa de Shout (1984) registrada no MusicBrainz.,confirmado
+r_0156,p_mark,proj_trk_6_3,intérprete,faixa,vocal/teclados,1984,1984,"[""s_mb_rgs""]",Faixa de Shout (1984) registrada no MusicBrainz.,confirmado
+r_0157,p_jerry,proj_trk_6_3,intérprete,faixa,baixo/vocal,1984,1984,"[""s_mb_rgs""]",Faixa de Shout (1984) registrada no MusicBrainz.,confirmado
+r_0158,p_mark,proj_trk_6_4,intérprete,faixa,vocal/teclados,1984,1984,"[""s_mb_rgs""]",Faixa de Shout (1984) registrada no MusicBrainz.,confirmado
+r_0159,p_jerry,proj_trk_6_4,intérprete,faixa,baixo/vocal,1984,1984,"[""s_mb_rgs""]",Faixa de Shout (1984) registrada no MusicBrainz.,confirmado
+r_0160,p_mark,proj_trk_6_5,intérprete,faixa,vocal/teclados,1984,1984,"[""s_mb_rgs""]",Faixa de Shout (1984) registrada no MusicBrainz.,confirmado
+r_0161,p_jerry,proj_trk_6_5,intérprete,faixa,baixo/vocal,1984,1984,"[""s_mb_rgs""]",Faixa de Shout (1984) registrada no MusicBrainz.,confirmado
+r_0162,p_mark,proj_trk_6_6,intérprete,faixa,vocal/teclados,1984,1984,"[""s_mb_rgs""]",Faixa de Shout (1984) registrada no MusicBrainz.,confirmado
+r_0163,p_jerry,proj_trk_6_6,intérprete,faixa,baixo/vocal,1984,1984,"[""s_mb_rgs""]",Faixa de Shout (1984) registrada no MusicBrainz.,confirmado
+r_0164,p_mark,proj_trk_6_7,intérprete,faixa,vocal/teclados,1984,1984,"[""s_mb_rgs""]",Faixa de Shout (1984) registrada no MusicBrainz.,confirmado
+r_0165,p_jerry,proj_trk_6_7,intérprete,faixa,baixo/vocal,1984,1984,"[""s_mb_rgs""]",Faixa de Shout (1984) registrada no MusicBrainz.,confirmado
+r_0166,p_mark,proj_trk_6_8,intérprete,faixa,vocal/teclados,1984,1984,"[""s_mb_rgs""]",Faixa de Shout (1984) registrada no MusicBrainz.,confirmado
+r_0167,p_jerry,proj_trk_6_8,intérprete,faixa,baixo/vocal,1984,1984,"[""s_mb_rgs""]",Faixa de Shout (1984) registrada no MusicBrainz.,confirmado
+r_0168,p_mark,proj_trk_6_9,intérprete,faixa,vocal/teclados,1984,1984,"[""s_mb_rgs""]",Faixa de Shout (1984) registrada no MusicBrainz.,confirmado
+r_0169,p_jerry,proj_trk_6_9,intérprete,faixa,baixo/vocal,1984,1984,"[""s_mb_rgs""]",Faixa de Shout (1984) registrada no MusicBrainz.,confirmado
+r_0170,p_mark,proj_trk_6_10,intérprete,faixa,vocal/teclados,1984,1984,"[""s_mb_rgs""]",Faixa de Shout (1984) registrada no MusicBrainz.,confirmado
+r_0171,p_jerry,proj_trk_6_10,intérprete,faixa,baixo/vocal,1984,1984,"[""s_mb_rgs""]",Faixa de Shout (1984) registrada no MusicBrainz.,confirmado
+r_0172,p_mark,proj_trk_7_1,intérprete,faixa,vocal/teclados,1988,1988,"[""s_mb_rgs""]",Faixa de Total Devo (1988) registrada no MusicBrainz.,confirmado
+r_0173,p_jerry,proj_trk_7_1,intérprete,faixa,baixo/vocal,1988,1988,"[""s_mb_rgs""]",Faixa de Total Devo (1988) registrada no MusicBrainz.,confirmado
+r_0174,p_mark,proj_trk_7_2,intérprete,faixa,vocal/teclados,1988,1988,"[""s_mb_rgs""]",Faixa de Total Devo (1988) registrada no MusicBrainz.,confirmado
+r_0175,p_jerry,proj_trk_7_2,intérprete,faixa,baixo/vocal,1988,1988,"[""s_mb_rgs""]",Faixa de Total Devo (1988) registrada no MusicBrainz.,confirmado
+r_0176,p_mark,proj_trk_7_3,intérprete,faixa,vocal/teclados,1988,1988,"[""s_mb_rgs""]",Faixa de Total Devo (1988) registrada no MusicBrainz.,confirmado
+r_0177,p_jerry,proj_trk_7_3,intérprete,faixa,baixo/vocal,1988,1988,"[""s_mb_rgs""]",Faixa de Total Devo (1988) registrada no MusicBrainz.,confirmado
+r_0178,p_mark,proj_trk_7_4,intérprete,faixa,vocal/teclados,1988,1988,"[""s_mb_rgs""]",Faixa de Total Devo (1988) registrada no MusicBrainz.,confirmado
+r_0179,p_jerry,proj_trk_7_4,intérprete,faixa,baixo/vocal,1988,1988,"[""s_mb_rgs""]",Faixa de Total Devo (1988) registrada no MusicBrainz.,confirmado
+r_0180,p_mark,proj_trk_7_5,intérprete,faixa,vocal/teclados,1988,1988,"[""s_mb_rgs""]",Faixa de Total Devo (1988) registrada no MusicBrainz.,confirmado
+r_0181,p_jerry,proj_trk_7_5,intérprete,faixa,baixo/vocal,1988,1988,"[""s_mb_rgs""]",Faixa de Total Devo (1988) registrada no MusicBrainz.,confirmado
+r_0182,p_mark,proj_trk_7_6,intérprete,faixa,vocal/teclados,1988,1988,"[""s_mb_rgs""]",Faixa de Total Devo (1988) registrada no MusicBrainz.,confirmado
+r_0183,p_jerry,proj_trk_7_6,intérprete,faixa,baixo/vocal,1988,1988,"[""s_mb_rgs""]",Faixa de Total Devo (1988) registrada no MusicBrainz.,confirmado
+r_0184,p_mark,proj_trk_7_7,intérprete,faixa,vocal/teclados,1988,1988,"[""s_mb_rgs""]",Faixa de Total Devo (1988) registrada no MusicBrainz.,confirmado
+r_0185,p_jerry,proj_trk_7_7,intérprete,faixa,baixo/vocal,1988,1988,"[""s_mb_rgs""]",Faixa de Total Devo (1988) registrada no MusicBrainz.,confirmado
+r_0186,p_mark,proj_trk_7_8,intérprete,faixa,vocal/teclados,1988,1988,"[""s_mb_rgs""]",Faixa de Total Devo (1988) registrada no MusicBrainz.,confirmado
+r_0187,p_jerry,proj_trk_7_8,intérprete,faixa,baixo/vocal,1988,1988,"[""s_mb_rgs""]",Faixa de Total Devo (1988) registrada no MusicBrainz.,confirmado
+r_0188,p_mark,proj_trk_7_9,intérprete,faixa,vocal/teclados,1988,1988,"[""s_mb_rgs""]",Faixa de Total Devo (1988) registrada no MusicBrainz.,confirmado
+r_0189,p_jerry,proj_trk_7_9,intérprete,faixa,baixo/vocal,1988,1988,"[""s_mb_rgs""]",Faixa de Total Devo (1988) registrada no MusicBrainz.,confirmado
+r_0190,p_mark,proj_trk_7_10,intérprete,faixa,vocal/teclados,1988,1988,"[""s_mb_rgs""]",Faixa de Total Devo (1988) registrada no MusicBrainz.,confirmado
+r_0191,p_jerry,proj_trk_7_10,intérprete,faixa,baixo/vocal,1988,1988,"[""s_mb_rgs""]",Faixa de Total Devo (1988) registrada no MusicBrainz.,confirmado
+r_0192,p_mark,proj_trk_7_11,intérprete,faixa,vocal/teclados,1988,1988,"[""s_mb_rgs""]",Faixa de Total Devo (1988) registrada no MusicBrainz.,confirmado
+r_0193,p_jerry,proj_trk_7_11,intérprete,faixa,baixo/vocal,1988,1988,"[""s_mb_rgs""]",Faixa de Total Devo (1988) registrada no MusicBrainz.,confirmado
+r_0194,p_mark,proj_trk_7_12,intérprete,faixa,vocal/teclados,1988,1988,"[""s_mb_rgs""]",Faixa de Total Devo (1988) registrada no MusicBrainz.,confirmado
+r_0195,p_jerry,proj_trk_7_12,intérprete,faixa,baixo/vocal,1988,1988,"[""s_mb_rgs""]",Faixa de Total Devo (1988) registrada no MusicBrainz.,confirmado
+r_0196,p_mark,proj_trk_7_13,intérprete,faixa,vocal/teclados,1988,1988,"[""s_mb_rgs""]",Faixa de Total Devo (1988) registrada no MusicBrainz.,confirmado
+r_0197,p_jerry,proj_trk_7_13,intérprete,faixa,baixo/vocal,1988,1988,"[""s_mb_rgs""]",Faixa de Total Devo (1988) registrada no MusicBrainz.,confirmado
+r_0198,p_mark,proj_trk_8_1,intérprete,faixa,vocal/teclados,1990,1990,"[""s_mb_rgs""]",Faixa de Smooth Noodle Maps (1990) registrada no MusicBrainz.,confirmado
+r_0199,p_jerry,proj_trk_8_1,intérprete,faixa,baixo/vocal,1990,1990,"[""s_mb_rgs""]",Faixa de Smooth Noodle Maps (1990) registrada no MusicBrainz.,confirmado
+r_0200,p_mark,proj_trk_8_2,intérprete,faixa,vocal/teclados,1990,1990,"[""s_mb_rgs""]",Faixa de Smooth Noodle Maps (1990) registrada no MusicBrainz.,confirmado
+r_0201,p_jerry,proj_trk_8_2,intérprete,faixa,baixo/vocal,1990,1990,"[""s_mb_rgs""]",Faixa de Smooth Noodle Maps (1990) registrada no MusicBrainz.,confirmado
+r_0202,p_mark,proj_trk_8_3,intérprete,faixa,vocal/teclados,1990,1990,"[""s_mb_rgs""]",Faixa de Smooth Noodle Maps (1990) registrada no MusicBrainz.,confirmado
+r_0203,p_jerry,proj_trk_8_3,intérprete,faixa,baixo/vocal,1990,1990,"[""s_mb_rgs""]",Faixa de Smooth Noodle Maps (1990) registrada no MusicBrainz.,confirmado
+r_0204,p_mark,proj_trk_8_4,intérprete,faixa,vocal/teclados,1990,1990,"[""s_mb_rgs""]",Faixa de Smooth Noodle Maps (1990) registrada no MusicBrainz.,confirmado
+r_0205,p_jerry,proj_trk_8_4,intérprete,faixa,baixo/vocal,1990,1990,"[""s_mb_rgs""]",Faixa de Smooth Noodle Maps (1990) registrada no MusicBrainz.,confirmado
+r_0206,p_mark,proj_trk_8_5,intérprete,faixa,vocal/teclados,1990,1990,"[""s_mb_rgs""]",Faixa de Smooth Noodle Maps (1990) registrada no MusicBrainz.,confirmado
+r_0207,p_jerry,proj_trk_8_5,intérprete,faixa,baixo/vocal,1990,1990,"[""s_mb_rgs""]",Faixa de Smooth Noodle Maps (1990) registrada no MusicBrainz.,confirmado
+r_0208,p_mark,proj_trk_8_6,intérprete,faixa,vocal/teclados,1990,1990,"[""s_mb_rgs""]",Faixa de Smooth Noodle Maps (1990) registrada no MusicBrainz.,confirmado
+r_0209,p_jerry,proj_trk_8_6,intérprete,faixa,baixo/vocal,1990,1990,"[""s_mb_rgs""]",Faixa de Smooth Noodle Maps (1990) registrada no MusicBrainz.,confirmado
+r_0210,p_mark,proj_trk_8_7,intérprete,faixa,vocal/teclados,1990,1990,"[""s_mb_rgs""]",Faixa de Smooth Noodle Maps (1990) registrada no MusicBrainz.,confirmado
+r_0211,p_jerry,proj_trk_8_7,intérprete,faixa,baixo/vocal,1990,1990,"[""s_mb_rgs""]",Faixa de Smooth Noodle Maps (1990) registrada no MusicBrainz.,confirmado
+r_0212,p_mark,proj_trk_8_8,intérprete,faixa,vocal/teclados,1990,1990,"[""s_mb_rgs""]",Faixa de Smooth Noodle Maps (1990) registrada no MusicBrainz.,confirmado
+r_0213,p_jerry,proj_trk_8_8,intérprete,faixa,baixo/vocal,1990,1990,"[""s_mb_rgs""]",Faixa de Smooth Noodle Maps (1990) registrada no MusicBrainz.,confirmado
+r_0214,p_mark,proj_trk_8_9,intérprete,faixa,vocal/teclados,1990,1990,"[""s_mb_rgs""]",Faixa de Smooth Noodle Maps (1990) registrada no MusicBrainz.,confirmado
+r_0215,p_jerry,proj_trk_8_9,intérprete,faixa,baixo/vocal,1990,1990,"[""s_mb_rgs""]",Faixa de Smooth Noodle Maps (1990) registrada no MusicBrainz.,confirmado
+r_0216,p_mark,proj_trk_8_10,intérprete,faixa,vocal/teclados,1990,1990,"[""s_mb_rgs""]",Faixa de Smooth Noodle Maps (1990) registrada no MusicBrainz.,confirmado
+r_0217,p_jerry,proj_trk_8_10,intérprete,faixa,baixo/vocal,1990,1990,"[""s_mb_rgs""]",Faixa de Smooth Noodle Maps (1990) registrada no MusicBrainz.,confirmado
+r_0218,p_mark,proj_trk_8_11,intérprete,faixa,vocal/teclados,1990,1990,"[""s_mb_rgs""]",Faixa de Smooth Noodle Maps (1990) registrada no MusicBrainz.,confirmado
+r_0219,p_jerry,proj_trk_8_11,intérprete,faixa,baixo/vocal,1990,1990,"[""s_mb_rgs""]",Faixa de Smooth Noodle Maps (1990) registrada no MusicBrainz.,confirmado
+r_0220,p_mark,proj_trk_9_1,intérprete,faixa,vocal/teclados,2010,2010,"[""s_mb_rgs""]",Faixa de Something for Everybody (2010) registrada no MusicBrainz.,confirmado
+r_0221,p_jerry,proj_trk_9_1,intérprete,faixa,baixo/vocal,2010,2010,"[""s_mb_rgs""]",Faixa de Something for Everybody (2010) registrada no MusicBrainz.,confirmado
+r_0222,p_mark,proj_trk_9_2,intérprete,faixa,vocal/teclados,2010,2010,"[""s_mb_rgs""]",Faixa de Something for Everybody (2010) registrada no MusicBrainz.,confirmado
+r_0223,p_jerry,proj_trk_9_2,intérprete,faixa,baixo/vocal,2010,2010,"[""s_mb_rgs""]",Faixa de Something for Everybody (2010) registrada no MusicBrainz.,confirmado
+r_0224,p_mark,proj_trk_9_3,intérprete,faixa,vocal/teclados,2010,2010,"[""s_mb_rgs""]",Faixa de Something for Everybody (2010) registrada no MusicBrainz.,confirmado
+r_0225,p_jerry,proj_trk_9_3,intérprete,faixa,baixo/vocal,2010,2010,"[""s_mb_rgs""]",Faixa de Something for Everybody (2010) registrada no MusicBrainz.,confirmado
+r_0226,p_mark,proj_trk_9_4,intérprete,faixa,vocal/teclados,2010,2010,"[""s_mb_rgs""]",Faixa de Something for Everybody (2010) registrada no MusicBrainz.,confirmado
+r_0227,p_jerry,proj_trk_9_4,intérprete,faixa,baixo/vocal,2010,2010,"[""s_mb_rgs""]",Faixa de Something for Everybody (2010) registrada no MusicBrainz.,confirmado
+r_0228,p_mark,proj_trk_9_5,intérprete,faixa,vocal/teclados,2010,2010,"[""s_mb_rgs""]",Faixa de Something for Everybody (2010) registrada no MusicBrainz.,confirmado
+r_0229,p_jerry,proj_trk_9_5,intérprete,faixa,baixo/vocal,2010,2010,"[""s_mb_rgs""]",Faixa de Something for Everybody (2010) registrada no MusicBrainz.,confirmado
+r_0230,p_mark,proj_trk_9_6,intérprete,faixa,vocal/teclados,2010,2010,"[""s_mb_rgs""]",Faixa de Something for Everybody (2010) registrada no MusicBrainz.,confirmado
+r_0231,p_jerry,proj_trk_9_6,intérprete,faixa,baixo/vocal,2010,2010,"[""s_mb_rgs""]",Faixa de Something for Everybody (2010) registrada no MusicBrainz.,confirmado
+r_0232,p_mark,proj_trk_9_7,intérprete,faixa,vocal/teclados,2010,2010,"[""s_mb_rgs""]",Faixa de Something for Everybody (2010) registrada no MusicBrainz.,confirmado
+r_0233,p_jerry,proj_trk_9_7,intérprete,faixa,baixo/vocal,2010,2010,"[""s_mb_rgs""]",Faixa de Something for Everybody (2010) registrada no MusicBrainz.,confirmado
+r_0234,p_mark,proj_trk_9_8,intérprete,faixa,vocal/teclados,2010,2010,"[""s_mb_rgs""]",Faixa de Something for Everybody (2010) registrada no MusicBrainz.,confirmado
+r_0235,p_jerry,proj_trk_9_8,intérprete,faixa,baixo/vocal,2010,2010,"[""s_mb_rgs""]",Faixa de Something for Everybody (2010) registrada no MusicBrainz.,confirmado
+r_0236,p_mark,proj_trk_9_9,intérprete,faixa,vocal/teclados,2010,2010,"[""s_mb_rgs""]",Faixa de Something for Everybody (2010) registrada no MusicBrainz.,confirmado
+r_0237,p_jerry,proj_trk_9_9,intérprete,faixa,baixo/vocal,2010,2010,"[""s_mb_rgs""]",Faixa de Something for Everybody (2010) registrada no MusicBrainz.,confirmado
+r_0238,p_mark,proj_trk_9_10,intérprete,faixa,vocal/teclados,2010,2010,"[""s_mb_rgs""]",Faixa de Something for Everybody (2010) registrada no MusicBrainz.,confirmado
+r_0239,p_jerry,proj_trk_9_10,intérprete,faixa,baixo/vocal,2010,2010,"[""s_mb_rgs""]",Faixa de Something for Everybody (2010) registrada no MusicBrainz.,confirmado
+r_0240,p_mark,proj_trk_9_11,intérprete,faixa,vocal/teclados,2010,2010,"[""s_mb_rgs""]",Faixa de Something for Everybody (2010) registrada no MusicBrainz.,confirmado
+r_0241,p_jerry,proj_trk_9_11,intérprete,faixa,baixo/vocal,2010,2010,"[""s_mb_rgs""]",Faixa de Something for Everybody (2010) registrada no MusicBrainz.,confirmado
+r_0242,p_mark,proj_trk_9_12,intérprete,faixa,vocal/teclados,2010,2010,"[""s_mb_rgs""]",Faixa de Something for Everybody (2010) registrada no MusicBrainz.,confirmado
+r_0243,p_jerry,proj_trk_9_12,intérprete,faixa,baixo/vocal,2010,2010,"[""s_mb_rgs""]",Faixa de Something for Everybody (2010) registrada no MusicBrainz.,confirmado
+r_0244,p_mark,proj_trk_9_13,intérprete,faixa,vocal/teclados,2010,2010,"[""s_mb_rgs""]",Faixa de Something for Everybody (2010) registrada no MusicBrainz.,confirmado
+r_0245,p_jerry,proj_trk_9_13,intérprete,faixa,baixo/vocal,2010,2010,"[""s_mb_rgs""]",Faixa de Something for Everybody (2010) registrada no MusicBrainz.,confirmado
+r_0246,p_mark,proj_trk_9_14,intérprete,faixa,vocal/teclados,2010,2010,"[""s_mb_rgs""]",Faixa de Something for Everybody (2010) registrada no MusicBrainz.,confirmado
+r_0247,p_jerry,proj_trk_9_14,intérprete,faixa,baixo/vocal,2010,2010,"[""s_mb_rgs""]",Faixa de Something for Everybody (2010) registrada no MusicBrainz.,confirmado
+r_0248,p_mark,proj_trk_9_15,intérprete,faixa,vocal/teclados,2010,2010,"[""s_mb_rgs""]",Faixa de Something for Everybody (2010) registrada no MusicBrainz.,confirmado
+r_0249,p_jerry,proj_trk_9_15,intérprete,faixa,baixo/vocal,2010,2010,"[""s_mb_rgs""]",Faixa de Something for Everybody (2010) registrada no MusicBrainz.,confirmado
+r_0250,p_mark,proj_trk_9_16,intérprete,faixa,vocal/teclados,2010,2010,"[""s_mb_rgs""]",Faixa de Something for Everybody (2010) registrada no MusicBrainz.,confirmado
+r_0251,p_jerry,proj_trk_9_16,intérprete,faixa,baixo/vocal,2010,2010,"[""s_mb_rgs""]",Faixa de Something for Everybody (2010) registrada no MusicBrainz.,confirmado

@@ -1,0 +1,8 @@
+id,url,title,type,consulted_on,status
+s_mb_artist,https://musicbrainz.org/artist/d2db1078-c170-4e22-b261-14f3ad60a690,MusicBrainz: Devo (Artist),base_discografica,2026-11-24,consultada
+s_mb_rgs,https://musicbrainz.org/ws/2/release-group?artist=d2db1078-c170-4e22-b261-14f3ad60a690,MusicBrainz API: Devo Release Groups & Tracklists,base_discografica,2026-11-24,consultada
+s_wiki_devo,https://en.wikipedia.org/wiki/Devo,Wikipedia: Devo,enciclopedia,2026-11-24,consultada
+s_wiki_discog,https://en.wikipedia.org/wiki/Devo_discography,Wikipedia: Devo discography,enciclopedia,2026-11-24,consultada
+s_clubdevo,https://clubdevo.com/,Club Devo — Official Website,oficial,2026-11-24,consultada
+s_discogs,https://www.discogs.com/artist/12834-Devo,Discogs: Devo,base_discografica,2026-11-24,consultada
+s_yt_search,https://www.youtube.com/results?search_query=Devo,YouTube: Resultados de busca para faixas do Devo,plataforma_midia,2026-11-24,consultada

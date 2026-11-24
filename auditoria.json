@@ -1,0 +1,39 @@
+{
+  "scope": "structural audit of declared evidence only; no external fact or playback verification",
+  "metrics": {
+    "raw_relations": 251,
+    "unique_structural_relations": 251,
+    "confirmed_declared_unique": 251,
+    "confirmed_by_grain": {
+      "projeto": 29,
+      "lançamento": 4,
+      "faixa": 218
+    },
+    "project_pairs": 23,
+    "confirmed_project_pairs": 23,
+    "relation_statuses": {
+      "confirmado": 251
+    },
+    "missing_start": 0,
+    "sources_consulted_declared_unique_urls": 7,
+    "sources_total": 7,
+    "direct_unique_service_ids": 105,
+    "direct_status_counts_nonexclusive": {
+      "não_verificado": 105
+    },
+    "recording_ids_declared_with_metadata_or_better": 0,
+    "people": 16,
+    "releases": 13
+  },
+  "targets": {
+    "relations": 200,
+    "links": 100
+  },
+  "gates": {
+    "relations": true,
+    "links": true
+  },
+  "errors": [],
+  "warnings": [],
+  "pass": true
+}

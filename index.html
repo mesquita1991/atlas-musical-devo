@@ -1,0 +1,6797 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Atlas Musical Auditável — Devo</title>
+  <style>
+    :root {
+      --bg: #0f1115;
+      --surface: #181c24;
+      --surface-2: #222834;
+      --text: #f1f5f9;
+      --muted: #94a3b8;
+      --accent: #ef4444;
+      --accent-2: #facc15;
+      --border: #2e3646;
+      --ok: #22c55e;
+      --warn: #f59e0b;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+      overflow-x: hidden;
+    }
+    a { color: var(--accent-2); }
+    a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible {
+      outline: 2px solid var(--accent-2);
+      outline-offset: 2px;
+    }
+    header {
+      background: var(--surface);
+      border-bottom: 2px solid var(--accent);
+      padding: 1.25rem 1.5rem;
+    }
+    .container { max-width: 1280px; margin: 0 auto; padding: 1rem 1.25rem; }
+    h1, h2, h3 { margin: 0 0 0.5rem; }
+    .subtitle { color: var(--muted); font-size: 0.95rem; }
+    nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 1rem;
+    }
+    .tab-btn {
+      background: var(--surface-2);
+      color: var(--text);
+      border: 1px solid var(--border);
+      padding: 0.5rem 0.9rem;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.9rem;
+    }
+    .tab-btn[aria-selected="true"] {
+      background: var(--accent);
+      border-color: var(--accent);
+      font-weight: 600;
+    }
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 0.75rem;
+      margin: 1rem 0;
+    }
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1rem;
+    }
+    .metric-val { font-size: 1.75rem; font-weight: 700; color: var(--accent-2); }
+    .metric-lbl { font-size: 0.82rem; color: var(--muted); }
+    .filters {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 0.6rem;
+      margin-bottom: 1rem;
+      background: var(--surface);
+      padding: 0.9rem;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+    }
+    .filters input, .filters select, .filters button {
+      width: 100%;
+      padding: 0.45rem 0.6rem;
+      background: var(--surface-2);
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 5px;
+      font-size: 0.88rem;
+    }
+    .filters button { cursor: pointer; background: var(--accent); border-color: var(--accent); font-weight: 600; }
+    .table-wrap { overflow-x: auto; border: 1px solid var(--border); border-radius: 8px; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+    th, td { padding: 0.55rem 0.75rem; border-bottom: 1px solid var(--border); text-align: left; }
+    th { background: var(--surface-2); position: sticky; top: 0; }
+    .badge {
+      display: inline-block;
+      padding: 0.15rem 0.45rem;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+    }
+    .badge-ok { border-color: var(--ok); color: var(--ok); }
+    .badge-warn { border-color: var(--warn); color: var(--warn); }
+    .panel { display: none; }
+    .panel.active { display: block; }
+    .timeline-list { display: grid; gap: 0.6rem; }
+    .timeline-item {
+      background: var(--surface);
+      border-left: 4px solid var(--accent-2);
+      padding: 0.75rem 1rem;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .timeline-item:hover { background: var(--surface-2); }
+    #network-svg {
+      width: 100%;
+      height: 420px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+    }
+    .empty-state {
+      padding: 2rem;
+      text-align: center;
+      color: var(--muted);
+      background: var(--surface);
+      border: 1px dashed var(--border);
+      border-radius: 8px;
+    }
+    .export-bar { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.75rem; }
+    .btn-sec {
+      background: var(--surface-2);
+      color: var(--text);
+      border: 1px solid var(--border);
+      padding: 0.45rem 0.8rem;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 0.85rem;
+    }
+    .btn-sec:hover { border-color: var(--accent-2); }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <h1>Atlas Musical Auditável: Devo</h1>
+      <div class="subtitle" id="cutoff-label"></div>
+      <nav role="tablist" aria-label="Módulos do Atlas">
+        <button class="tab-btn" role="tab" aria-selected="true" data-tab="overview">Visão Geral</button>
+        <button class="tab-btn" role="tab" aria-selected="false" data-tab="relations">Relações &amp; Filtros</button>
+        <button class="tab-btn" role="tab" aria-selected="false" data-tab="people">Biografias</button>
+        <button class="tab-btn" role="tab" aria-selected="false" data-tab="releases">Discografia</button>
+        <button class="tab-btn" role="tab" aria-selected="false" data-tab="timeline">Linha do Tempo</button>
+        <button class="tab-btn" role="tab" aria-selected="false" data-tab="network">Rede</button>
+        <button class="tab-btn" role="tab" aria-selected="false" data-tab="links">Links &amp; Fontes</button>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <section id="panel-overview" class="panel active">
+      <div class="metrics-grid" id="metrics-grid"></div>
+      <div class="card">
+        <h3>Exportações Reais (JSON / CSV)</h3>
+        <p class="subtitle">Geradas diretamente a partir do banco de dados incorporado.</p>
+        <div class="export-bar">
+          <button class="btn-sec" id="dl-json">Baixar banco.json</button>
+          <button class="btn-sec" id="dl-rel-csv">Baixar relations.csv</button>
+          <button class="btn-sec" id="dl-people-csv">Baixar people.csv</button>
+          <button class="btn-sec" id="dl-links-csv">Baixar links.csv</button>
+        </div>
+      </div>
+      <div class="card" style="margin-top: 1rem;">
+        <h3>Limitações e Escopo</h3>
+        <ul id="limitations-list"></ul>
+      </div>
+    </section>
+
+    <section id="panel-relations" class="panel">
+      <div class="filters">
+        <input type="text" id="f-search" placeholder="Buscar pessoa, projeto, instrumento..." aria-label="Buscar" />
+        <select id="f-person" aria-label="Filtrar por pessoa"><option value="">Todas as pessoas</option></select>
+        <select id="f-grain" aria-label="Filtrar por granularidade"><option value="">Todas granularidades</option></select>
+        <select id="f-status" aria-label="Filtrar por status"><option value="">Todos os status</option></select>
+        <button id="f-clear">Limpar filtros</button>
+      </div>
+      <div id="rel-count" class="subtitle" style="margin-bottom: 0.5rem;"></div>
+      <div class="table-wrap" id="rel-table-wrap">
+        <table>
+          <thead>
+            <tr><th>Pessoa</th><th>Projeto/Objeto</th><th>Vínculo</th><th>Granularidade</th><th>Instrumento</th><th>Período</th><th>Status</th></tr>
+          </thead>
+          <tbody id="rel-tbody"></tbody>
+        </table>
+      </div>
+      <div id="rel-empty" class="empty-state" style="display:none;">Nenhuma relação encontrada com os filtros atuais.</div>
+    </section>
+
+    <section id="panel-people" class="panel">
+      <div class="metrics-grid" id="people-grid"></div>
+    </section>
+
+    <section id="panel-releases" class="panel">
+      <div class="metrics-grid" id="releases-grid"></div>
+    </section>
+
+    <section id="panel-timeline" class="panel">
+      <p class="subtitle">Clique em um marco para filtrar as relações daquele ano.</p>
+      <div class="timeline-list" id="timeline-list"></div>
+    </section>
+
+    <section id="panel-network" class="panel">
+      <p class="subtitle">Rede interativa de integrantes e projetos externos/banda. Clique em um nó para filtrar.</p>
+      <svg id="network-svg" viewBox="0 0 800 420" role="img" aria-label="Grafo de relações do Devo"></svg>
+      <div id="network-info" class="card" style="margin-top:0.75rem;">Selecione um nó no grafo acima para ver detalhes.</div>
+    </section>
+
+    <section id="panel-links" class="panel">
+      <h3>Fontes Consultadas</h3>
+      <div class="table-wrap" style="margin-bottom:1rem;">
+        <table>
+          <thead><tr><th>ID</th><th>Título</th><th>Tipo</th><th>Consulta</th><th>Status</th></tr></thead>
+          <tbody id="sources-tbody"></tbody>
+        </table>
+      </div>
+      <h3>Links Diretos (YouTube)</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Faixa</th><th>Recording ID</th><th>URL</th><th>Status</th></tr></thead>
+          <tbody id="links-tbody"></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <script id="banco-data" type="application/json">{
+  "cutoff": "2026-11-24",
+  "people": [
+    {
+      "id": "p_mark",
+      "name": "Mark Mothersbaugh",
+      "roles": [
+        "vocal",
+        "teclados",
+        "sintetizador",
+        "guitarra"
+      ],
+      "membership": "oficial",
+      "bio": "Co-fundador do Devo (1973), vocalista principal, tecladista e compositor; fundador da produtora Mutato Muzika.",
+      "source_ids": [
+        "s_wiki_devo",
+        "s_mb_artist"
+      ]
+    },
+    {
+      "id": "p_jerry",
+      "name": "Gerald Casale",
+      "roles": [
+        "baixo",
+        "vocal",
+        "teclados"
+      ],
+      "membership": "oficial",
+      "bio": "Co-fundador do Devo (1973), baixista, vocalista, letrista e diretor de videoclipes.",
+      "source_ids": [
+        "s_wiki_devo",
+        "s_mb_artist"
+      ]
+    },
+    {
+      "id": "p_bob1",
+      "name": "Bob Mothersbaugh",
+      "roles": [
+        "guitarra solo",
+        "vocal"
+      ],
+      "membership": "oficial",
+      "bio": "Conhecido como Bob 1; guitarrista solo do Devo desde 1974.",
+      "source_ids": [
+        "s_wiki_devo",
+        "s_mb_artist"
+      ]
+    },
+    {
+      "id": "p_bob2",
+      "name": "Bob Casale",
+      "roles": [
+        "guitarra base",
+        "teclados",
+        "vocal de apoio"
+      ],
+      "membership": "ex-integrante",
+      "bio": "Conhecido como Bob 2; guitarrista e tecladista do Devo em múltiplos períodos até seu falecimento em 2014.",
+      "source_ids": [
+        "s_wiki_devo",
+        "s_mb_artist"
+      ]
+    },
+    {
+      "id": "p_alan",
+      "name": "Alan Myers",
+      "roles": [
+        "bateria",
+        "percussão"
+      ],
+      "membership": "ex-integrante",
+      "bio": "Baterista da formação clássica do Devo (1976–1986), falecido em 2013.",
+      "source_ids": [
+        "s_wiki_devo",
+        "s_mb_artist"
+      ]
+    },
+    {
+      "id": "p_david",
+      "name": "David Kendrick",
+      "roles": [
+        "bateria"
+      ],
+      "membership": "ex-integrante",
+      "bio": "Baterista do Devo (1987–1991, 1996–2004), também integrante de Sparks e Gleaming Spires.",
+      "source_ids": [
+        "s_wiki_devo",
+        "s_mb_artist"
+      ]
+    },
+    {
+      "id": "p_joshf",
+      "name": "Josh Freese",
+      "roles": [
+        "bateria",
+        "percussão"
+      ],
+      "membership": "oficial",
+      "bio": "Baterista do Devo desde 1996, além de integrar The Vandals e A Perfect Circle.",
+      "source_ids": [
+        "s_wiki_devo",
+        "s_mb_artist"
+      ]
+    },
+    {
+      "id": "p_joshh",
+      "name": "Josh Hager",
+      "roles": [
+        "guitarra base",
+        "teclados"
+      ],
+      "membership": "oficial",
+      "bio": "Guitarrista e tecladista do Devo desde 2014, após o falecimento de Bob Casale.",
+      "source_ids": [
+        "s_wiki_devo"
+      ]
+    },
+    {
+      "id": "p_bobl",
+      "name": "Bob Lewis",
+      "roles": [
+        "guitarra"
+      ],
+      "membership": "ex-integrante",
+      "bio": "Co-fundador conceitual do Devo em 1973 na Kent State University.",
+      "source_ids": [
+        "s_wiki_devo"
+      ]
+    },
+    {
+      "id": "p_jimm",
+      "name": "Jim Mothersbaugh",
+      "roles": [
+        "bateria eletrônica"
+      ],
+      "membership": "ex-integrante",
+      "bio": "Baterista dos primeiros anos do Devo (1974–1975).",
+      "source_ids": [
+        "s_wiki_devo"
+      ]
+    },
+    {
+      "id": "p_rod",
+      "name": "Rod Reisman",
+      "roles": [
+        "bateria"
+      ],
+      "membership": "ex-integrante",
+      "bio": "Baterista na formação inicial de 1973.",
+      "source_ids": [
+        "s_wiki_devo"
+      ]
+    },
+    {
+      "id": "p_fred",
+      "name": "Fred Weber",
+      "roles": [
+        "vocal"
+      ],
+      "membership": "ex-integrante",
+      "bio": "Vocalista na formação inicial de 1973.",
+      "source_ids": [
+        "s_wiki_devo"
+      ]
+    },
+    {
+      "id": "p_eno",
+      "name": "Brian Eno",
+      "roles": [
+        "produção"
+      ],
+      "membership": "produtor",
+      "bio": "Produtor do álbum de estreia Q: Are We Not Men? A: We Are Devo! (1978).",
+      "source_ids": [
+        "s_wiki_devo",
+        "s_discogs"
+      ]
+    },
+    {
+      "id": "p_kenscott",
+      "name": "Ken Scott",
+      "roles": [
+        "produção"
+      ],
+      "membership": "produtor",
+      "bio": "Produtor de Duty Now for the Future (1979).",
+      "source_ids": [
+        "s_discogs"
+      ]
+    },
+    {
+      "id": "p_margouleff",
+      "name": "Robert Margouleff",
+      "roles": [
+        "produção"
+      ],
+      "membership": "produtor",
+      "bio": "Co-produtor de Freedom of Choice (1980).",
+      "source_ids": [
+        "s_discogs"
+      ]
+    },
+    {
+      "id": "p_rtb",
+      "name": "Roy Thomas Baker",
+      "roles": [
+        "produção"
+      ],
+      "membership": "produtor",
+      "bio": "Produtor de Oh, No! It's Devo (1982).",
+      "source_ids": [
+        "s_discogs"
+      ]
+    }
+  ],
+  "projects": [
+    {
+      "id": "proj_devo",
+      "name": "Devo",
+      "kind": "banda"
+    },
+    {
+      "id": "proj_mutato",
+      "name": "Mutato Muzika",
+      "kind": "produtora"
+    },
+    {
+      "id": "proj_jihad",
+      "name": "Jihad Jerry & the Evildoers",
+      "kind": "solo"
+    },
+    {
+      "id": "proj_wipeouters",
+      "name": "The Wipeouters",
+      "kind": "projeto_paralelo"
+    },
+    {
+      "id": "proj_vandals",
+      "name": "The Vandals",
+      "kind": "banda"
+    },
+    {
+      "id": "proj_apc",
+      "name": "A Perfect Circle",
+      "kind": "banda"
+    },
+    {
+      "id": "proj_sparks",
+      "name": "Sparks",
+      "kind": "banda"
+    },
+    {
+      "id": "proj_gleaming",
+      "name": "Gleaming Spires",
+      "kind": "banda"
+    },
+    {
+      "id": "proj_ponty",
+      "name": "Jean-Luc Ponty Band",
+      "kind": "banda"
+    },
+    {
+      "id": "proj_elevator",
+      "name": "The Elevator Drops",
+      "kind": "banda"
+    },
+    {
+      "id": "proj_alb_1",
+      "name": "Q: Are We Not Men? A: We Are Devo!",
+      "kind": "álbum"
+    },
+    {
+      "id": "proj_trk_1_1",
+      "name": "Uncontrollable Urge (Q: Are We Not Men? A: We Are Devo!)",
+      "kind": "faixa"
+    },
+    {
+      "id": "proj_trk_1_2",
+      "name": "(I Can’t Get No) Satisfaction (Q: Are We Not Men? A: We Are Devo!)",
+      "kind": "faixa"
+    },
+    {
+      "id": "proj_trk_1_3",
+      "name": "Praying Hands (Q: Are We Not Men? A: We Are Devo!)",
+      "kind": "faixa"
+    },
+    {
+      "id": "proj_trk_1_4",
+      "name": "Space Junk (Q: Are We Not Men? A: We Are Devo!)",
+      "kind": "faixa"
+    },
+    {
+      "id": "proj_trk_1_5",
+      "name": "Mongoloid (Q: Are We Not Men? A: We Are Devo!)",
+      "kind": "faixa"
+    },
+    {
+      "id": "proj_trk_1_6",
+      "name": "Jocko Homo (Q: Are We Not Men? A: We Are Devo!)",
+      "kind": "faixa"
+    },
+    {
+      "id": "proj_trk_1_7",
+      "name": "Too Much Paranoias (Q: Are We Not Men? A: We Are Devo!)",
+      "kind": "faixa"
+    },
+    {
+      "id": "proj_trk_1_8",
+      "name": "Gut Feeling / (Slap Your Mammy) (Q: Are We Not Men? A: We Are Devo!)",
+      "kind": "faixa"
+    },
+    {
+      "id": "proj_trk_1_9",
+      "name": "Come Back Jonee (Q: Are We Not Men? A: We Are Devo!)",
+      "kind": "faixa"
+    },
+    {
+      "id": "proj_trk_1_10",
+      "name": "Sloppy (I Saw My Baby Gettin’) (Q: Are We Not Men? A: We Are Devo!)",
+      "kind": "faixa"
+    },
+    {
+      "id": "proj_trk_1_11",
+      "name": "Shrivel‐Up (Q: Are We Not Men? A: We Are Devo!)",
+      "kind": "faixa"
+    },
+    {
+      "id": "proj_alb_2",
+      "name": "Duty Now for the Future",
+      "kind": "álbum"
+    },
+    {
+      "id": "proj_trk_2_1",
+      "name": "Devo Corporate Anthem (Duty Now for the Future)",
+      "kind": "faixa"
+    },
+    {
+      "id": "proj_trk_2_2",
+      "name": "Clockout (Duty Now for the Future)",
+      "kind": "faixa"
+    },
+    {
+      "id": "proj_trk_2_3",
+      "name": "Timing X (Duty Now for the Future)",
+      "kind": "faixa"
+    },
+    {
+      "id": "proj_trk_2_4",
+      "name": "Wiggly World (Duty Now for the Future)",
+      "kind": "faixa"
+    },
+    {
+      "id": "proj_trk_2_5",
+      "name": "Blockhead (Duty Now for the Future)",
+      "kind": "faixa"
+    },
+    {
+      "id": "proj_trk_2_6",
+      "name": "Strange Pursuit (Duty Now for the Future)",
+      "kind": "faixa"
+    },
+    {
+      "id": "proj_trk_2_7",
+      "name": "S.I.B. (Swelling Itching Brain) (Duty Now for the Future)",
+      "kind": "faixa"
+    },
+    {
+      "id": "proj_trk_2_8",
+      "name": "Triumph of the Will (Duty Now for the Future)",
+      "kind": "faixa"
+    },
+    {
+      "id": "proj_trk_2_9",
+      "name": "The Day My Baby Gave Me a Surprize (Duty Now for the Future)",
+      "kind": "faixa"
+    },
+    {
+      "id": "proj_trk_2_10",
+      "name": "Pink Pussycat (Duty Now for the Future)",
+      "kind": "faixa"
+    },
+    {
+      "id": "proj_trk_2_11",
+      "name": "Secret Agent Man (Duty Now for the Future)",
+      "kind": "faixa"
+    },
+    {
+      "id": "proj_trk_2_12",
+      "name": "Smart Patrol / Mr. DNA (Duty Now for the Future)",
+      "kind": "faixa"
+    },
+    {
+      "id": "proj_trk_2_13",
+      "name": "Red Eye (Duty Now for the Future)",
+      "kind": "faixa"
+    },
+    {
+      "id": "proj_alb_3",
+      "name": "Freedom of Choice",
+      "kind": "álbum"
+    },
+    {
+      "id": "proj_trk_3_1",
+      "name": "Girl U Want (Freedom of Choice)",
+      "kind": "faixa"
+    },
+    {
+      "id": "proj_trk_3_2",
+      "name": "It’s Not Right (Freedom of Choice)",
+      "kind": "faixa"
+    },
+    {
+      "id": "proj_trk_3_3",
+      "name": "Whip It (Freedom of Choice)",
+      "kind": "faixa"
+    },
+    {
+      "id": "proj_trk_3_4",
+      "name": "Snowball (Freedom of Choice)",
+      "kind": "faixa"
+    },
+    {
+      "id": "proj_trk_3_5",
+      "name": "Ton o’ Luv (Freedom of Choice)",
+      "kind": "faixa"
+    },
+    {
+      "id": "proj_trk_3_6",
+      "name": "Freedom of Choice (Freedom of Choice)",
+      "kind": "faixa"
+    },
+    {
+      "id": "proj_trk_3_7",
+      "name": "Gates of Steel (Freedom of Choice)",
+      "kind": "faixa"
+    },
+    {
+      "id": "proj_trk_3_8",
+      "name": "Cold War (Freedom of Choice)",
+      "kind": "faixa"
+    },
+    {
+      "id": "proj_trk_3_9",
+      "name": "Don’t You Know (Freedom of Choice)",
+      "kind": "faixa"
+    },
+    {
+      "id": "proj_trk_3_10",
+      "name": "That’s Pep! (Freedom of Choice)",
+      "kind": "faixa"
+    },
+    {
+      "id": "proj_trk_3_11",
+      "name": "Mr. B’s Ballroom (Freedom of Choice)",
+      "kind": "faixa"
+    },
+    {
+      "id": "proj_trk_3_12",
+      "name": "Planet Earth (Freedom of Choice)",
+      "kind": "faixa"
+    },
+    {
+      "id": "proj_alb_4",
+      "name": "New Traditionalists",
+      "kind": "álbum"
+    },
+    {
+      "id": "proj_trk_4_1",
+      "name": "Through Being Cool (New Traditionalists)",
+      "kind": "faixa"
+    },
+    {
+      "id": "proj_trk_4_2",
+      "name": "Jerkin’ Back ’n’ Forth (New Traditionalists)",
+      "kind": "faixa"
+    },
+    {
+      "id": "proj_trk_4_3",
+      "name": "Pity You (New Traditionalists)",
+      "kind": "faixa"
+    },
+    {
+      "id": "proj_trk_4_4",
+      "name": "Soft Things (New Traditionalists)",
+      "kind": "faixa"
+    },
+    {
+      "id": "proj_trk_4_5",
+      "name": "Going Under (New Traditionalists)",
+      "kind": "faixa"
+    },
+    {
+      "id": "proj_trk_4_6",
+      "name": "Race of Doom (New Traditionalists)",
+      "kind": "faixa"
+    },
+    {
+      "id": "proj_trk_4_7",
+      "name": "Love Without Anger (New Traditionalists)",
+      "kind": "faixa"
+    },
+    {
+      "id": "proj_trk_4_8",
+      "name": "The Super Thing (New Traditionalists)",
+      "kind": "faixa"
+    },
+    {
+      "id": "proj_trk_4_9",
+      "name": "Beautiful World (New Traditionalists)",
+      "kind": "faixa"
+    },
+    {
+      "id": "proj_trk_4_10",
+      "name": "Enough Said (New Traditionalists)",
+      "kind": "faixa"
+    },
+    {
+      "id": "proj_trk_4_11",
+      "name": "Working in the Coal Mine (New Traditionalists)",
+      "kind": "faixa"
+    },
+    {
+      "id": "proj_trk_4_12",
+      "name": "Working in the Coal Mine (New Traditionalists)",
+      "kind": "faixa"
+    },
+    {
+      "id": "proj_alb_5",
+      "name": "Oh, No! It's Devo",
+      "kind": "álbum"
+    },
+    {
+      "id": "proj_trk_5_1",
+      "name": "Time Out for Fun (Oh, No! It's Devo)",
+      "kind": "faixa"
+    },
+    {
+      "id": "proj_trk_5_2",
+      "name": "Peek·A·Boo! (Oh, No! It's Devo)",
+      "kind": "faixa"
+    },
+    {
+      "id": "proj_trk_5_3",
+      "name": "Out of Sync (Oh, No! It's Devo)",
+      "kind": "faixa"
+    },
+    {
+      "id": "proj_trk_5_4",
+      "name": "Explosions (Oh, No! It's Devo)",
+      "kind": "faixa"
+    },
+    {
+      "id": "proj_trk_5_5",
+      "name": "That’s Good (Oh, No! It's Devo)",
+      "kind": "faixa"
+    },
+    {
+      "id": "proj_trk_5_6",
+      "name": "Patterns (Oh, No! It's Devo)",
+      "kind": "faixa"
+    },
+    {
+      "id": "proj_trk_5_7",
+      "name": "Big Mess (Oh, No! It's Devo)",
+      "kind": "faixa"
+    },
+    {
+      "id": "proj_trk_5_8",
+      "name": "Speed Racer (Oh, No! It's Devo)",
+      "kind": "faixa"
+    },
+    {
+      "id": "proj_trk_5_9",
+      "name": "What I Must Do (Oh, No! It's Devo)",
+      "kind": "faixa"
+    },
+    {
+      "id": "proj_trk_5_10",
+      "name": "I Desire (Oh, No! It's Devo)",
+      "kind": "faixa"
+    },
+    {
+      "id": "proj_trk_5_11",
+      "name": "Deep Sleep (Oh, No! It's Devo)",
+      "kind": "faixa"
+    },
+    {
+      "id": "proj_alb_6",
+      "name": "Shout",
+      "kind": "álbum"
+    },
+    {
+      "id": "proj_trk_6_1",
+      "name": "Shout (Shout)",
+      "kind": "faixa"
+    },
+    {
+      "id": "proj_trk_6_2",
+      "name": "The Satisfied Mind (Shout)",
+      "kind": "faixa"
+    },
+    {
+      "id": "proj_trk_6_3",
+      "name": "Don’t Rescue Me (Shout)",
+      "kind": "faixa"
+    },
+    {
+      "id": "proj_trk_6_4",
+      "name": "The 4th Dimension (Shout)",
+      "kind": "faixa"
+    },
+    {
+      "id": "proj_trk_6_5",
+      "name": "C’mon (Shout)",
+      "kind": "faixa"
+    },
+    {
+      "id": "proj_trk_6_6",
+      "name": "Here to Go (Shout)",
+      "kind": "faixa"
+    },
+    {
+      "id": "proj_trk_6_7",
+      "name": "Jurisdiction of Love (Shout)",
+      "kind": "faixa"
+    },
+    {
+      "id": "proj_trk_6_8",
+      "name": "Puppet Boy (Shout)",
+      "kind": "faixa"
+    },
+    {
+      "id": "proj_trk_6_9",
+      "name": "Please Please (Shout)",
+      "kind": "faixa"
+    },
+    {
+      "id": "proj_trk_6_10",
+      "name": "Are You Experienced? (Shout)",
+      "kind": "faixa"
+    },
+    {
+      "id": "proj_alb_7",
+      "name": "Total Devo",
+      "kind": "álbum"
+    },
+    {
+      "id": "proj_trk_7_1",
+      "name": "Baby Doll (Total Devo)",
+      "kind": "faixa"
+    },
+    {
+      "id": "proj_trk_7_2",
+      "name": "Disco Dancer (Total Devo)",
+      "kind": "faixa"
+    },
+    {
+      "id": "proj_trk_7_3",
+      "name": "Some Things Never Change (Total Devo)",
+      "kind": "faixa"
+    },
+    {
+      "id": "proj_trk_7_4",
+      "name": "Plain Truth (Total Devo)",
+      "kind": "faixa"
+    },
+    {
+      "id": "proj_trk_7_5",
+      "name": "Happy Guy (Total Devo)",
+      "kind": "faixa"
+    },
+    {
+      "id": "proj_trk_7_6",
+      "name": "Don't Be Cruel (Total Devo)",
+      "kind": "faixa"
+    },
+    {
+      "id": "proj_trk_7_7",
+      "name": "The Shadow (Total Devo)",
+      "kind": "faixa"
+    },
+    {
+      "id": "proj_trk_7_8",
+      "name": "I'd Cry If You Died (Total Devo)",
+      "kind": "faixa"
+    },
+    {
+      "id": "proj_trk_7_9",
+      "name": "Agitated (Total Devo)",
+      "kind": "faixa"
+    },
+    {
+      "id": "proj_trk_7_10",
+      "name": "Man Turned Inside Out (Total Devo)",
+      "kind": "faixa"
+    },
+    {
+      "id": "proj_trk_7_11",
+      "name": "Sexi Luv (Total Devo)",
+      "kind": "faixa"
+    },
+    {
+      "id": "proj_trk_7_12",
+      "name": "Blow Up (Total Devo)",
+      "kind": "faixa"
+    },
+    {
+      "id": "proj_trk_7_13",
+      "name": "Some Things Never Change (cassette version) (Total Devo)",
+      "kind": "faixa"
+    },
+    {
+      "id": "proj_alb_8",
+      "name": "Smooth Noodle Maps",
+      "kind": "álbum"
+    },
+    {
+      "id": "proj_trk_8_1",
+      "name": "Stuck in a Loop (Smooth Noodle Maps)",
+      "kind": "faixa"
+    },
+    {
+      "id": "proj_trk_8_2",
+      "name": "Post Post‐Modern Man (Smooth Noodle Maps)",
+      "kind": "faixa"
+    },
+    {
+      "id": "proj_trk_8_3",
+      "name": "When We Do It (Smooth Noodle Maps)",
+      "kind": "faixa"
+    },
+    {
+      "id": "proj_trk_8_4",
+      "name": "Spin the Wheel (Smooth Noodle Maps)",
+      "kind": "faixa"
+    },
+    {
+      "id": "proj_trk_8_5",
+      "name": "Morning Dew (Smooth Noodle Maps)",
+      "kind": "faixa"
+    },
+    {
+      "id": "proj_trk_8_6",
+      "name": "A Change Is Gonna Cum (Smooth Noodle Maps)",
+      "kind": "faixa"
+    },
+    {
+      "id": "proj_trk_8_7",
+      "name": "The Big Picture (Smooth Noodle Maps)",
+      "kind": "faixa"
+    },
+    {
+      "id": "proj_trk_8_8",
+      "name": "Pink Jazz Trancers (Smooth Noodle Maps)",
+      "kind": "faixa"
+    },
+    {
+      "id": "proj_trk_8_9",
+      "name": "Jimmy (Smooth Noodle Maps)",
+      "kind": "faixa"
+    },
+    {
+      "id": "proj_trk_8_10",
+      "name": "DEVO Has Feelings Too (Smooth Noodle Maps)",
+      "kind": "faixa"
+    },
+    {
+      "id": "proj_trk_8_11",
+      "name": "Dawghaus (Smooth Noodle Maps)",
+      "kind": "faixa"
+    },
+    {
+      "id": "proj_alb_9",
+      "name": "Something for Everybody",
+      "kind": "álbum"
+    },
+    {
+      "id": "proj_trk_9_1",
+      "name": "Fresh (Something for Everybody)",
+      "kind": "faixa"
+    },
+    {
+      "id": "proj_trk_9_2",
+      "name": "What We Do (Something for Everybody)",
+      "kind": "faixa"
+    },
+    {
+      "id": "proj_trk_9_3",
+      "name": "Please Baby Please (Something for Everybody)",
+      "kind": "faixa"
+    },
+    {
+      "id": "proj_trk_9_4",
+      "name": "Don’t Shoot (I’m a Man) (Something for Everybody)",
+      "kind": "faixa"
+    },
+    {
+      "id": "proj_trk_9_5",
+      "name": "Mind Games (Something for Everybody)",
+      "kind": "faixa"
+    },
+    {
+      "id": "proj_trk_9_6",
+      "name": "Human Rocket (Something for Everybody)",
+      "kind": "faixa"
+    },
+    {
+      "id": "proj_trk_9_7",
+      "name": "Sumthin’ (Something for Everybody)",
+      "kind": "faixa"
+    },
+    {
+      "id": "proj_trk_9_8",
+      "name": "Step Up (Something for Everybody)",
+      "kind": "faixa"
+    },
+    {
+      "id": "proj_trk_9_9",
+      "name": "Cameo (Something for Everybody)",
+      "kind": "faixa"
+    },
+    {
+      "id": "proj_trk_9_10",
+      "name": "Later Is Now (Something for Everybody)",
+      "kind": "faixa"
+    },
+    {
+      "id": "proj_trk_9_11",
+      "name": "No Place Like Home (Something for Everybody)",
+      "kind": "faixa"
+    },
+    {
+      "id": "proj_trk_9_12",
+      "name": "March On (Something for Everybody)",
+      "kind": "faixa"
+    },
+    {
+      "id": "proj_trk_9_13",
+      "name": "Watch Us Work It (Something for Everybody)",
+      "kind": "faixa"
+    },
+    {
+      "id": "proj_trk_9_14",
+      "name": "Signal Ready (Something for Everybody)",
+      "kind": "faixa"
+    },
+    {
+      "id": "proj_trk_9_15",
+      "name": "Let’s Get to It (Something for Everybody)",
+      "kind": "faixa"
+    },
+    {
+      "id": "proj_trk_9_16",
+      "name": "Knock Boots (Something for Everybody)",
+      "kind": "faixa"
+    }
+  ],
+  "relations": [
+    {
+      "id": "r_0001",
+      "person_id": "p_mark",
+      "project_id": "proj_devo",
+      "kind": "integrante",
+      "grain": "projeto",
+      "instrument": "vocal/teclados",
+      "start": 1973,
+      "end": 1991,
+      "source_ids": [
+        "s_wiki_devo",
+        "s_mb_artist"
+      ],
+      "evidence": "Período oficial documentado (1973–1991) na formação do Devo.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0002",
+      "person_id": "p_mark",
+      "project_id": "proj_devo",
+      "kind": "integrante",
+      "grain": "projeto",
+      "instrument": "vocal/teclados",
+      "start": 1996,
+      "end": 2026,
+      "source_ids": [
+        "s_wiki_devo",
+        "s_mb_artist"
+      ],
+      "evidence": "Período oficial documentado (1996–2026) na formação do Devo.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0003",
+      "person_id": "p_jerry",
+      "project_id": "proj_devo",
+      "kind": "integrante",
+      "grain": "projeto",
+      "instrument": "baixo/vocal",
+      "start": 1973,
+      "end": 1991,
+      "source_ids": [
+        "s_wiki_devo",
+        "s_mb_artist"
+      ],
+      "evidence": "Período oficial documentado (1973–1991) na formação do Devo.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0004",
+      "person_id": "p_jerry",
+      "project_id": "proj_devo",
+      "kind": "integrante",
+      "grain": "projeto",
+      "instrument": "baixo/vocal",
+      "start": 1996,
+      "end": 2026,
+      "source_ids": [
+        "s_wiki_devo",
+        "s_mb_artist"
+      ],
+      "evidence": "Período oficial documentado (1996–2026) na formação do Devo.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0005",
+      "person_id": "p_bob1",
+      "project_id": "proj_devo",
+      "kind": "integrante",
+      "grain": "projeto",
+      "instrument": "guitarra solo",
+      "start": 1974,
+      "end": 1991,
+      "source_ids": [
+        "s_wiki_devo",
+        "s_mb_artist"
+      ],
+      "evidence": "Período oficial documentado (1974–1991) na formação do Devo.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0006",
+      "person_id": "p_bob1",
+      "project_id": "proj_devo",
+      "kind": "integrante",
+      "grain": "projeto",
+      "instrument": "guitarra solo",
+      "start": 1996,
+      "end": 2026,
+      "source_ids": [
+        "s_wiki_devo",
+        "s_mb_artist"
+      ],
+      "evidence": "Período oficial documentado (1996–2026) na formação do Devo.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0007",
+      "person_id": "p_bob2",
+      "project_id": "proj_devo",
+      "kind": "integrante",
+      "grain": "projeto",
+      "instrument": "guitarra base/teclados",
+      "start": 1973,
+      "end": 1974,
+      "source_ids": [
+        "s_wiki_devo",
+        "s_mb_artist"
+      ],
+      "evidence": "Período oficial documentado (1973–1974) na formação do Devo.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0008",
+      "person_id": "p_bob2",
+      "project_id": "proj_devo",
+      "kind": "integrante",
+      "grain": "projeto",
+      "instrument": "guitarra base/teclados",
+      "start": 1976,
+      "end": 1991,
+      "source_ids": [
+        "s_wiki_devo",
+        "s_mb_artist"
+      ],
+      "evidence": "Período oficial documentado (1976–1991) na formação do Devo.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0009",
+      "person_id": "p_bob2",
+      "project_id": "proj_devo",
+      "kind": "integrante",
+      "grain": "projeto",
+      "instrument": "guitarra base/teclados",
+      "start": 1996,
+      "end": 2014,
+      "source_ids": [
+        "s_wiki_devo",
+        "s_mb_artist"
+      ],
+      "evidence": "Período oficial documentado (1996–2014) na formação do Devo.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0010",
+      "person_id": "p_alan",
+      "project_id": "proj_devo",
+      "kind": "integrante",
+      "grain": "projeto",
+      "instrument": "bateria",
+      "start": 1976,
+      "end": 1986,
+      "source_ids": [
+        "s_wiki_devo",
+        "s_mb_artist"
+      ],
+      "evidence": "Período oficial documentado (1976–1986) na formação do Devo.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0011",
+      "person_id": "p_david",
+      "project_id": "proj_devo",
+      "kind": "integrante",
+      "grain": "projeto",
+      "instrument": "bateria",
+      "start": 1987,
+      "end": 1991,
+      "source_ids": [
+        "s_wiki_devo",
+        "s_mb_artist"
+      ],
+      "evidence": "Período oficial documentado (1987–1991) na formação do Devo.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0012",
+      "person_id": "p_david",
+      "project_id": "proj_devo",
+      "kind": "integrante",
+      "grain": "projeto",
+      "instrument": "bateria",
+      "start": 1996,
+      "end": 2004,
+      "source_ids": [
+        "s_wiki_devo",
+        "s_mb_artist"
+      ],
+      "evidence": "Período oficial documentado (1996–2004) na formação do Devo.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0013",
+      "person_id": "p_joshf",
+      "project_id": "proj_devo",
+      "kind": "integrante",
+      "grain": "projeto",
+      "instrument": "bateria",
+      "start": 1996,
+      "end": 2026,
+      "source_ids": [
+        "s_wiki_devo",
+        "s_mb_artist"
+      ],
+      "evidence": "Período oficial documentado (1996–2026) na formação do Devo.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0014",
+      "person_id": "p_joshh",
+      "project_id": "proj_devo",
+      "kind": "integrante",
+      "grain": "projeto",
+      "instrument": "guitarra base/teclados",
+      "start": 2014,
+      "end": 2026,
+      "source_ids": [
+        "s_wiki_devo",
+        "s_mb_artist"
+      ],
+      "evidence": "Período oficial documentado (2014–2026) na formação do Devo.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0015",
+      "person_id": "p_bobl",
+      "project_id": "proj_devo",
+      "kind": "integrante",
+      "grain": "projeto",
+      "instrument": "guitarra",
+      "start": 1973,
+      "end": 1974,
+      "source_ids": [
+        "s_wiki_devo",
+        "s_mb_artist"
+      ],
+      "evidence": "Período oficial documentado (1973–1974) na formação do Devo.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0016",
+      "person_id": "p_jimm",
+      "project_id": "proj_devo",
+      "kind": "integrante",
+      "grain": "projeto",
+      "instrument": "bateria eletrônica",
+      "start": 1974,
+      "end": 1975,
+      "source_ids": [
+        "s_wiki_devo",
+        "s_mb_artist"
+      ],
+      "evidence": "Período oficial documentado (1974–1975) na formação do Devo.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0017",
+      "person_id": "p_rod",
+      "project_id": "proj_devo",
+      "kind": "integrante",
+      "grain": "projeto",
+      "instrument": "bateria",
+      "start": 1973,
+      "end": 1973,
+      "source_ids": [
+        "s_wiki_devo",
+        "s_mb_artist"
+      ],
+      "evidence": "Período oficial documentado (1973–1973) na formação do Devo.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0018",
+      "person_id": "p_fred",
+      "project_id": "proj_devo",
+      "kind": "integrante",
+      "grain": "projeto",
+      "instrument": "vocal",
+      "start": 1973,
+      "end": 1973,
+      "source_ids": [
+        "s_wiki_devo",
+        "s_mb_artist"
+      ],
+      "evidence": "Período oficial documentado (1973–1973) na formação do Devo.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0019",
+      "person_id": "p_mark",
+      "project_id": "proj_mutato",
+      "kind": "fundador",
+      "grain": "projeto",
+      "instrument": "composição/produção",
+      "start": 1989,
+      "end": 2026,
+      "source_ids": [
+        "s_wiki_devo"
+      ],
+      "evidence": "Fundador da produtora Mutato Muzika.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0020",
+      "person_id": "p_jerry",
+      "project_id": "proj_jihad",
+      "kind": "solo",
+      "grain": "projeto",
+      "instrument": "vocal/baixo",
+      "start": 2006,
+      "end": 2006,
+      "source_ids": [
+        "s_wiki_devo"
+      ],
+      "evidence": "Projeto solo Jihad Jerry & the Evildoers (2006).",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0021",
+      "person_id": "p_mark",
+      "project_id": "proj_wipeouters",
+      "kind": "integrante",
+      "grain": "projeto",
+      "instrument": "teclados/guitarra",
+      "start": 2001,
+      "end": 2001,
+      "source_ids": [
+        "s_wiki_devo"
+      ],
+      "evidence": "Projeto paralelo surf-rock The Wipeouters (2001).",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0022",
+      "person_id": "p_bob1",
+      "project_id": "proj_wipeouters",
+      "kind": "integrante",
+      "grain": "projeto",
+      "instrument": "guitarra",
+      "start": 2001,
+      "end": 2001,
+      "source_ids": [
+        "s_wiki_devo"
+      ],
+      "evidence": "Projeto paralelo surf-rock The Wipeouters (2001).",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0023",
+      "person_id": "p_bob2",
+      "project_id": "proj_wipeouters",
+      "kind": "integrante",
+      "grain": "projeto",
+      "instrument": "guitarra",
+      "start": 2001,
+      "end": 2001,
+      "source_ids": [
+        "s_wiki_devo"
+      ],
+      "evidence": "Projeto paralelo surf-rock The Wipeouters (2001).",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0024",
+      "person_id": "p_joshf",
+      "project_id": "proj_vandals",
+      "kind": "integrante",
+      "grain": "projeto",
+      "instrument": "bateria",
+      "start": 1989,
+      "end": 2026,
+      "source_ids": [
+        "s_wiki_devo"
+      ],
+      "evidence": "Baterista de longa data do The Vandals.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0025",
+      "person_id": "p_joshf",
+      "project_id": "proj_apc",
+      "kind": "integrante",
+      "grain": "projeto",
+      "instrument": "bateria",
+      "start": 1999,
+      "end": 2012,
+      "source_ids": [
+        "s_wiki_devo"
+      ],
+      "evidence": "Baterista do A Perfect Circle.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0026",
+      "person_id": "p_david",
+      "project_id": "proj_sparks",
+      "kind": "integrante",
+      "grain": "projeto",
+      "instrument": "bateria",
+      "start": 1981,
+      "end": 1986,
+      "source_ids": [
+        "s_wiki_devo"
+      ],
+      "evidence": "Baterista do Sparks antes de ingressar no Devo.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0027",
+      "person_id": "p_david",
+      "project_id": "proj_gleaming",
+      "kind": "integrante",
+      "grain": "projeto",
+      "instrument": "bateria",
+      "start": 1980,
+      "end": 1988,
+      "source_ids": [
+        "s_wiki_devo"
+      ],
+      "evidence": "Integrante do Gleaming Spires.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0028",
+      "person_id": "p_alan",
+      "project_id": "proj_ponty",
+      "kind": "integrante",
+      "grain": "projeto",
+      "instrument": "bateria",
+      "start": 1987,
+      "end": 1989,
+      "source_ids": [
+        "s_wiki_devo"
+      ],
+      "evidence": "Colaboração com Jean-Luc Ponty após saída do Devo.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0029",
+      "person_id": "p_joshh",
+      "project_id": "proj_elevator",
+      "kind": "integrante",
+      "grain": "projeto",
+      "instrument": "guitarra/vocal",
+      "start": 1994,
+      "end": 2001,
+      "source_ids": [
+        "s_wiki_devo"
+      ],
+      "evidence": "Integrante do The Elevator Drops.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0030",
+      "person_id": "p_eno",
+      "project_id": "proj_alb_1",
+      "kind": "produção",
+      "grain": "lançamento",
+      "instrument": "produção",
+      "start": 1978,
+      "end": 1978,
+      "source_ids": [
+        "s_discogs",
+        "s_wiki_discog"
+      ],
+      "evidence": "Produção creditada no álbum Q: Are We Not Men? A: We Are Devo! (1978).",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0031",
+      "person_id": "p_mark",
+      "project_id": "proj_trk_1_1",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "vocal/teclados",
+      "start": 1978,
+      "end": 1978,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Q: Are We Not Men? A: We Are Devo! (1978) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0032",
+      "person_id": "p_jerry",
+      "project_id": "proj_trk_1_1",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "baixo/vocal",
+      "start": 1978,
+      "end": 1978,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Q: Are We Not Men? A: We Are Devo! (1978) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0033",
+      "person_id": "p_mark",
+      "project_id": "proj_trk_1_2",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "vocal/teclados",
+      "start": 1978,
+      "end": 1978,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Q: Are We Not Men? A: We Are Devo! (1978) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0034",
+      "person_id": "p_jerry",
+      "project_id": "proj_trk_1_2",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "baixo/vocal",
+      "start": 1978,
+      "end": 1978,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Q: Are We Not Men? A: We Are Devo! (1978) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0035",
+      "person_id": "p_mark",
+      "project_id": "proj_trk_1_3",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "vocal/teclados",
+      "start": 1978,
+      "end": 1978,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Q: Are We Not Men? A: We Are Devo! (1978) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0036",
+      "person_id": "p_jerry",
+      "project_id": "proj_trk_1_3",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "baixo/vocal",
+      "start": 1978,
+      "end": 1978,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Q: Are We Not Men? A: We Are Devo! (1978) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0037",
+      "person_id": "p_mark",
+      "project_id": "proj_trk_1_4",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "vocal/teclados",
+      "start": 1978,
+      "end": 1978,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Q: Are We Not Men? A: We Are Devo! (1978) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0038",
+      "person_id": "p_jerry",
+      "project_id": "proj_trk_1_4",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "baixo/vocal",
+      "start": 1978,
+      "end": 1978,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Q: Are We Not Men? A: We Are Devo! (1978) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0039",
+      "person_id": "p_mark",
+      "project_id": "proj_trk_1_5",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "vocal/teclados",
+      "start": 1978,
+      "end": 1978,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Q: Are We Not Men? A: We Are Devo! (1978) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0040",
+      "person_id": "p_jerry",
+      "project_id": "proj_trk_1_5",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "baixo/vocal",
+      "start": 1978,
+      "end": 1978,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Q: Are We Not Men? A: We Are Devo! (1978) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0041",
+      "person_id": "p_mark",
+      "project_id": "proj_trk_1_6",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "vocal/teclados",
+      "start": 1978,
+      "end": 1978,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Q: Are We Not Men? A: We Are Devo! (1978) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0042",
+      "person_id": "p_jerry",
+      "project_id": "proj_trk_1_6",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "baixo/vocal",
+      "start": 1978,
+      "end": 1978,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Q: Are We Not Men? A: We Are Devo! (1978) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0043",
+      "person_id": "p_mark",
+      "project_id": "proj_trk_1_7",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "vocal/teclados",
+      "start": 1978,
+      "end": 1978,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Q: Are We Not Men? A: We Are Devo! (1978) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0044",
+      "person_id": "p_jerry",
+      "project_id": "proj_trk_1_7",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "baixo/vocal",
+      "start": 1978,
+      "end": 1978,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Q: Are We Not Men? A: We Are Devo! (1978) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0045",
+      "person_id": "p_mark",
+      "project_id": "proj_trk_1_8",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "vocal/teclados",
+      "start": 1978,
+      "end": 1978,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Q: Are We Not Men? A: We Are Devo! (1978) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0046",
+      "person_id": "p_jerry",
+      "project_id": "proj_trk_1_8",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "baixo/vocal",
+      "start": 1978,
+      "end": 1978,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Q: Are We Not Men? A: We Are Devo! (1978) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0047",
+      "person_id": "p_mark",
+      "project_id": "proj_trk_1_9",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "vocal/teclados",
+      "start": 1978,
+      "end": 1978,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Q: Are We Not Men? A: We Are Devo! (1978) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0048",
+      "person_id": "p_jerry",
+      "project_id": "proj_trk_1_9",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "baixo/vocal",
+      "start": 1978,
+      "end": 1978,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Q: Are We Not Men? A: We Are Devo! (1978) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0049",
+      "person_id": "p_mark",
+      "project_id": "proj_trk_1_10",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "vocal/teclados",
+      "start": 1978,
+      "end": 1978,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Q: Are We Not Men? A: We Are Devo! (1978) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0050",
+      "person_id": "p_jerry",
+      "project_id": "proj_trk_1_10",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "baixo/vocal",
+      "start": 1978,
+      "end": 1978,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Q: Are We Not Men? A: We Are Devo! (1978) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0051",
+      "person_id": "p_mark",
+      "project_id": "proj_trk_1_11",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "vocal/teclados",
+      "start": 1978,
+      "end": 1978,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Q: Are We Not Men? A: We Are Devo! (1978) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0052",
+      "person_id": "p_jerry",
+      "project_id": "proj_trk_1_11",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "baixo/vocal",
+      "start": 1978,
+      "end": 1978,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Q: Are We Not Men? A: We Are Devo! (1978) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0053",
+      "person_id": "p_kenscott",
+      "project_id": "proj_alb_2",
+      "kind": "produção",
+      "grain": "lançamento",
+      "instrument": "produção",
+      "start": 1979,
+      "end": 1979,
+      "source_ids": [
+        "s_discogs",
+        "s_wiki_discog"
+      ],
+      "evidence": "Produção creditada no álbum Duty Now for the Future (1979).",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0054",
+      "person_id": "p_mark",
+      "project_id": "proj_trk_2_1",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "vocal/teclados",
+      "start": 1979,
+      "end": 1979,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Duty Now for the Future (1979) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0055",
+      "person_id": "p_jerry",
+      "project_id": "proj_trk_2_1",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "baixo/vocal",
+      "start": 1979,
+      "end": 1979,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Duty Now for the Future (1979) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0056",
+      "person_id": "p_mark",
+      "project_id": "proj_trk_2_2",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "vocal/teclados",
+      "start": 1979,
+      "end": 1979,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Duty Now for the Future (1979) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0057",
+      "person_id": "p_jerry",
+      "project_id": "proj_trk_2_2",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "baixo/vocal",
+      "start": 1979,
+      "end": 1979,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Duty Now for the Future (1979) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0058",
+      "person_id": "p_mark",
+      "project_id": "proj_trk_2_3",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "vocal/teclados",
+      "start": 1979,
+      "end": 1979,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Duty Now for the Future (1979) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0059",
+      "person_id": "p_jerry",
+      "project_id": "proj_trk_2_3",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "baixo/vocal",
+      "start": 1979,
+      "end": 1979,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Duty Now for the Future (1979) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0060",
+      "person_id": "p_mark",
+      "project_id": "proj_trk_2_4",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "vocal/teclados",
+      "start": 1979,
+      "end": 1979,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Duty Now for the Future (1979) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0061",
+      "person_id": "p_jerry",
+      "project_id": "proj_trk_2_4",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "baixo/vocal",
+      "start": 1979,
+      "end": 1979,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Duty Now for the Future (1979) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0062",
+      "person_id": "p_mark",
+      "project_id": "proj_trk_2_5",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "vocal/teclados",
+      "start": 1979,
+      "end": 1979,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Duty Now for the Future (1979) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0063",
+      "person_id": "p_jerry",
+      "project_id": "proj_trk_2_5",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "baixo/vocal",
+      "start": 1979,
+      "end": 1979,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Duty Now for the Future (1979) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0064",
+      "person_id": "p_mark",
+      "project_id": "proj_trk_2_6",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "vocal/teclados",
+      "start": 1979,
+      "end": 1979,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Duty Now for the Future (1979) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0065",
+      "person_id": "p_jerry",
+      "project_id": "proj_trk_2_6",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "baixo/vocal",
+      "start": 1979,
+      "end": 1979,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Duty Now for the Future (1979) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0066",
+      "person_id": "p_mark",
+      "project_id": "proj_trk_2_7",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "vocal/teclados",
+      "start": 1979,
+      "end": 1979,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Duty Now for the Future (1979) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0067",
+      "person_id": "p_jerry",
+      "project_id": "proj_trk_2_7",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "baixo/vocal",
+      "start": 1979,
+      "end": 1979,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Duty Now for the Future (1979) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0068",
+      "person_id": "p_mark",
+      "project_id": "proj_trk_2_8",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "vocal/teclados",
+      "start": 1979,
+      "end": 1979,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Duty Now for the Future (1979) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0069",
+      "person_id": "p_jerry",
+      "project_id": "proj_trk_2_8",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "baixo/vocal",
+      "start": 1979,
+      "end": 1979,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Duty Now for the Future (1979) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0070",
+      "person_id": "p_mark",
+      "project_id": "proj_trk_2_9",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "vocal/teclados",
+      "start": 1979,
+      "end": 1979,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Duty Now for the Future (1979) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0071",
+      "person_id": "p_jerry",
+      "project_id": "proj_trk_2_9",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "baixo/vocal",
+      "start": 1979,
+      "end": 1979,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Duty Now for the Future (1979) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0072",
+      "person_id": "p_mark",
+      "project_id": "proj_trk_2_10",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "vocal/teclados",
+      "start": 1979,
+      "end": 1979,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Duty Now for the Future (1979) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0073",
+      "person_id": "p_jerry",
+      "project_id": "proj_trk_2_10",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "baixo/vocal",
+      "start": 1979,
+      "end": 1979,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Duty Now for the Future (1979) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0074",
+      "person_id": "p_mark",
+      "project_id": "proj_trk_2_11",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "vocal/teclados",
+      "start": 1979,
+      "end": 1979,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Duty Now for the Future (1979) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0075",
+      "person_id": "p_jerry",
+      "project_id": "proj_trk_2_11",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "baixo/vocal",
+      "start": 1979,
+      "end": 1979,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Duty Now for the Future (1979) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0076",
+      "person_id": "p_mark",
+      "project_id": "proj_trk_2_12",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "vocal/teclados",
+      "start": 1979,
+      "end": 1979,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Duty Now for the Future (1979) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0077",
+      "person_id": "p_jerry",
+      "project_id": "proj_trk_2_12",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "baixo/vocal",
+      "start": 1979,
+      "end": 1979,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Duty Now for the Future (1979) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0078",
+      "person_id": "p_mark",
+      "project_id": "proj_trk_2_13",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "vocal/teclados",
+      "start": 1979,
+      "end": 1979,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Duty Now for the Future (1979) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0079",
+      "person_id": "p_jerry",
+      "project_id": "proj_trk_2_13",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "baixo/vocal",
+      "start": 1979,
+      "end": 1979,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Duty Now for the Future (1979) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0080",
+      "person_id": "p_margouleff",
+      "project_id": "proj_alb_3",
+      "kind": "produção",
+      "grain": "lançamento",
+      "instrument": "produção",
+      "start": 1980,
+      "end": 1980,
+      "source_ids": [
+        "s_discogs",
+        "s_wiki_discog"
+      ],
+      "evidence": "Produção creditada no álbum Freedom of Choice (1980).",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0081",
+      "person_id": "p_mark",
+      "project_id": "proj_trk_3_1",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "vocal/teclados",
+      "start": 1980,
+      "end": 1980,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Freedom of Choice (1980) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0082",
+      "person_id": "p_jerry",
+      "project_id": "proj_trk_3_1",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "baixo/vocal",
+      "start": 1980,
+      "end": 1980,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Freedom of Choice (1980) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0083",
+      "person_id": "p_mark",
+      "project_id": "proj_trk_3_2",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "vocal/teclados",
+      "start": 1980,
+      "end": 1980,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Freedom of Choice (1980) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0084",
+      "person_id": "p_jerry",
+      "project_id": "proj_trk_3_2",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "baixo/vocal",
+      "start": 1980,
+      "end": 1980,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Freedom of Choice (1980) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0085",
+      "person_id": "p_mark",
+      "project_id": "proj_trk_3_3",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "vocal/teclados",
+      "start": 1980,
+      "end": 1980,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Freedom of Choice (1980) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0086",
+      "person_id": "p_jerry",
+      "project_id": "proj_trk_3_3",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "baixo/vocal",
+      "start": 1980,
+      "end": 1980,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Freedom of Choice (1980) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0087",
+      "person_id": "p_mark",
+      "project_id": "proj_trk_3_4",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "vocal/teclados",
+      "start": 1980,
+      "end": 1980,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Freedom of Choice (1980) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0088",
+      "person_id": "p_jerry",
+      "project_id": "proj_trk_3_4",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "baixo/vocal",
+      "start": 1980,
+      "end": 1980,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Freedom of Choice (1980) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0089",
+      "person_id": "p_mark",
+      "project_id": "proj_trk_3_5",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "vocal/teclados",
+      "start": 1980,
+      "end": 1980,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Freedom of Choice (1980) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0090",
+      "person_id": "p_jerry",
+      "project_id": "proj_trk_3_5",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "baixo/vocal",
+      "start": 1980,
+      "end": 1980,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Freedom of Choice (1980) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0091",
+      "person_id": "p_mark",
+      "project_id": "proj_trk_3_6",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "vocal/teclados",
+      "start": 1980,
+      "end": 1980,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Freedom of Choice (1980) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0092",
+      "person_id": "p_jerry",
+      "project_id": "proj_trk_3_6",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "baixo/vocal",
+      "start": 1980,
+      "end": 1980,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Freedom of Choice (1980) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0093",
+      "person_id": "p_mark",
+      "project_id": "proj_trk_3_7",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "vocal/teclados",
+      "start": 1980,
+      "end": 1980,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Freedom of Choice (1980) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0094",
+      "person_id": "p_jerry",
+      "project_id": "proj_trk_3_7",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "baixo/vocal",
+      "start": 1980,
+      "end": 1980,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Freedom of Choice (1980) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0095",
+      "person_id": "p_mark",
+      "project_id": "proj_trk_3_8",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "vocal/teclados",
+      "start": 1980,
+      "end": 1980,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Freedom of Choice (1980) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0096",
+      "person_id": "p_jerry",
+      "project_id": "proj_trk_3_8",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "baixo/vocal",
+      "start": 1980,
+      "end": 1980,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Freedom of Choice (1980) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0097",
+      "person_id": "p_mark",
+      "project_id": "proj_trk_3_9",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "vocal/teclados",
+      "start": 1980,
+      "end": 1980,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Freedom of Choice (1980) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0098",
+      "person_id": "p_jerry",
+      "project_id": "proj_trk_3_9",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "baixo/vocal",
+      "start": 1980,
+      "end": 1980,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Freedom of Choice (1980) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0099",
+      "person_id": "p_mark",
+      "project_id": "proj_trk_3_10",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "vocal/teclados",
+      "start": 1980,
+      "end": 1980,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Freedom of Choice (1980) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0100",
+      "person_id": "p_jerry",
+      "project_id": "proj_trk_3_10",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "baixo/vocal",
+      "start": 1980,
+      "end": 1980,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Freedom of Choice (1980) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0101",
+      "person_id": "p_mark",
+      "project_id": "proj_trk_3_11",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "vocal/teclados",
+      "start": 1980,
+      "end": 1980,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Freedom of Choice (1980) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0102",
+      "person_id": "p_jerry",
+      "project_id": "proj_trk_3_11",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "baixo/vocal",
+      "start": 1980,
+      "end": 1980,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Freedom of Choice (1980) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0103",
+      "person_id": "p_mark",
+      "project_id": "proj_trk_3_12",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "vocal/teclados",
+      "start": 1980,
+      "end": 1980,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Freedom of Choice (1980) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0104",
+      "person_id": "p_jerry",
+      "project_id": "proj_trk_3_12",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "baixo/vocal",
+      "start": 1980,
+      "end": 1980,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Freedom of Choice (1980) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0105",
+      "person_id": "p_mark",
+      "project_id": "proj_trk_4_1",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "vocal/teclados",
+      "start": 1981,
+      "end": 1981,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de New Traditionalists (1981) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0106",
+      "person_id": "p_jerry",
+      "project_id": "proj_trk_4_1",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "baixo/vocal",
+      "start": 1981,
+      "end": 1981,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de New Traditionalists (1981) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0107",
+      "person_id": "p_mark",
+      "project_id": "proj_trk_4_2",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "vocal/teclados",
+      "start": 1981,
+      "end": 1981,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de New Traditionalists (1981) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0108",
+      "person_id": "p_jerry",
+      "project_id": "proj_trk_4_2",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "baixo/vocal",
+      "start": 1981,
+      "end": 1981,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de New Traditionalists (1981) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0109",
+      "person_id": "p_mark",
+      "project_id": "proj_trk_4_3",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "vocal/teclados",
+      "start": 1981,
+      "end": 1981,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de New Traditionalists (1981) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0110",
+      "person_id": "p_jerry",
+      "project_id": "proj_trk_4_3",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "baixo/vocal",
+      "start": 1981,
+      "end": 1981,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de New Traditionalists (1981) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0111",
+      "person_id": "p_mark",
+      "project_id": "proj_trk_4_4",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "vocal/teclados",
+      "start": 1981,
+      "end": 1981,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de New Traditionalists (1981) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0112",
+      "person_id": "p_jerry",
+      "project_id": "proj_trk_4_4",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "baixo/vocal",
+      "start": 1981,
+      "end": 1981,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de New Traditionalists (1981) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0113",
+      "person_id": "p_mark",
+      "project_id": "proj_trk_4_5",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "vocal/teclados",
+      "start": 1981,
+      "end": 1981,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de New Traditionalists (1981) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0114",
+      "person_id": "p_jerry",
+      "project_id": "proj_trk_4_5",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "baixo/vocal",
+      "start": 1981,
+      "end": 1981,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de New Traditionalists (1981) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0115",
+      "person_id": "p_mark",
+      "project_id": "proj_trk_4_6",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "vocal/teclados",
+      "start": 1981,
+      "end": 1981,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de New Traditionalists (1981) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0116",
+      "person_id": "p_jerry",
+      "project_id": "proj_trk_4_6",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "baixo/vocal",
+      "start": 1981,
+      "end": 1981,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de New Traditionalists (1981) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0117",
+      "person_id": "p_mark",
+      "project_id": "proj_trk_4_7",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "vocal/teclados",
+      "start": 1981,
+      "end": 1981,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de New Traditionalists (1981) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0118",
+      "person_id": "p_jerry",
+      "project_id": "proj_trk_4_7",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "baixo/vocal",
+      "start": 1981,
+      "end": 1981,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de New Traditionalists (1981) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0119",
+      "person_id": "p_mark",
+      "project_id": "proj_trk_4_8",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "vocal/teclados",
+      "start": 1981,
+      "end": 1981,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de New Traditionalists (1981) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0120",
+      "person_id": "p_jerry",
+      "project_id": "proj_trk_4_8",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "baixo/vocal",
+      "start": 1981,
+      "end": 1981,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de New Traditionalists (1981) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0121",
+      "person_id": "p_mark",
+      "project_id": "proj_trk_4_9",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "vocal/teclados",
+      "start": 1981,
+      "end": 1981,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de New Traditionalists (1981) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0122",
+      "person_id": "p_jerry",
+      "project_id": "proj_trk_4_9",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "baixo/vocal",
+      "start": 1981,
+      "end": 1981,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de New Traditionalists (1981) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0123",
+      "person_id": "p_mark",
+      "project_id": "proj_trk_4_10",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "vocal/teclados",
+      "start": 1981,
+      "end": 1981,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de New Traditionalists (1981) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0124",
+      "person_id": "p_jerry",
+      "project_id": "proj_trk_4_10",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "baixo/vocal",
+      "start": 1981,
+      "end": 1981,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de New Traditionalists (1981) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0125",
+      "person_id": "p_mark",
+      "project_id": "proj_trk_4_11",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "vocal/teclados",
+      "start": 1981,
+      "end": 1981,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de New Traditionalists (1981) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0126",
+      "person_id": "p_jerry",
+      "project_id": "proj_trk_4_11",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "baixo/vocal",
+      "start": 1981,
+      "end": 1981,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de New Traditionalists (1981) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0127",
+      "person_id": "p_mark",
+      "project_id": "proj_trk_4_12",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "vocal/teclados",
+      "start": 1981,
+      "end": 1981,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de New Traditionalists (1981) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0128",
+      "person_id": "p_jerry",
+      "project_id": "proj_trk_4_12",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "baixo/vocal",
+      "start": 1981,
+      "end": 1981,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de New Traditionalists (1981) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0129",
+      "person_id": "p_rtb",
+      "project_id": "proj_alb_5",
+      "kind": "produção",
+      "grain": "lançamento",
+      "instrument": "produção",
+      "start": 1982,
+      "end": 1982,
+      "source_ids": [
+        "s_discogs",
+        "s_wiki_discog"
+      ],
+      "evidence": "Produção creditada no álbum Oh, No! It's Devo (1982).",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0130",
+      "person_id": "p_mark",
+      "project_id": "proj_trk_5_1",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "vocal/teclados",
+      "start": 1982,
+      "end": 1982,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Oh, No! It's Devo (1982) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0131",
+      "person_id": "p_jerry",
+      "project_id": "proj_trk_5_1",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "baixo/vocal",
+      "start": 1982,
+      "end": 1982,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Oh, No! It's Devo (1982) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0132",
+      "person_id": "p_mark",
+      "project_id": "proj_trk_5_2",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "vocal/teclados",
+      "start": 1982,
+      "end": 1982,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Oh, No! It's Devo (1982) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0133",
+      "person_id": "p_jerry",
+      "project_id": "proj_trk_5_2",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "baixo/vocal",
+      "start": 1982,
+      "end": 1982,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Oh, No! It's Devo (1982) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0134",
+      "person_id": "p_mark",
+      "project_id": "proj_trk_5_3",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "vocal/teclados",
+      "start": 1982,
+      "end": 1982,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Oh, No! It's Devo (1982) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0135",
+      "person_id": "p_jerry",
+      "project_id": "proj_trk_5_3",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "baixo/vocal",
+      "start": 1982,
+      "end": 1982,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Oh, No! It's Devo (1982) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0136",
+      "person_id": "p_mark",
+      "project_id": "proj_trk_5_4",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "vocal/teclados",
+      "start": 1982,
+      "end": 1982,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Oh, No! It's Devo (1982) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0137",
+      "person_id": "p_jerry",
+      "project_id": "proj_trk_5_4",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "baixo/vocal",
+      "start": 1982,
+      "end": 1982,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Oh, No! It's Devo (1982) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0138",
+      "person_id": "p_mark",
+      "project_id": "proj_trk_5_5",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "vocal/teclados",
+      "start": 1982,
+      "end": 1982,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Oh, No! It's Devo (1982) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0139",
+      "person_id": "p_jerry",
+      "project_id": "proj_trk_5_5",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "baixo/vocal",
+      "start": 1982,
+      "end": 1982,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Oh, No! It's Devo (1982) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0140",
+      "person_id": "p_mark",
+      "project_id": "proj_trk_5_6",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "vocal/teclados",
+      "start": 1982,
+      "end": 1982,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Oh, No! It's Devo (1982) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0141",
+      "person_id": "p_jerry",
+      "project_id": "proj_trk_5_6",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "baixo/vocal",
+      "start": 1982,
+      "end": 1982,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Oh, No! It's Devo (1982) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0142",
+      "person_id": "p_mark",
+      "project_id": "proj_trk_5_7",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "vocal/teclados",
+      "start": 1982,
+      "end": 1982,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Oh, No! It's Devo (1982) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0143",
+      "person_id": "p_jerry",
+      "project_id": "proj_trk_5_7",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "baixo/vocal",
+      "start": 1982,
+      "end": 1982,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Oh, No! It's Devo (1982) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0144",
+      "person_id": "p_mark",
+      "project_id": "proj_trk_5_8",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "vocal/teclados",
+      "start": 1982,
+      "end": 1982,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Oh, No! It's Devo (1982) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0145",
+      "person_id": "p_jerry",
+      "project_id": "proj_trk_5_8",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "baixo/vocal",
+      "start": 1982,
+      "end": 1982,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Oh, No! It's Devo (1982) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0146",
+      "person_id": "p_mark",
+      "project_id": "proj_trk_5_9",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "vocal/teclados",
+      "start": 1982,
+      "end": 1982,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Oh, No! It's Devo (1982) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0147",
+      "person_id": "p_jerry",
+      "project_id": "proj_trk_5_9",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "baixo/vocal",
+      "start": 1982,
+      "end": 1982,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Oh, No! It's Devo (1982) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0148",
+      "person_id": "p_mark",
+      "project_id": "proj_trk_5_10",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "vocal/teclados",
+      "start": 1982,
+      "end": 1982,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Oh, No! It's Devo (1982) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0149",
+      "person_id": "p_jerry",
+      "project_id": "proj_trk_5_10",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "baixo/vocal",
+      "start": 1982,
+      "end": 1982,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Oh, No! It's Devo (1982) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0150",
+      "person_id": "p_mark",
+      "project_id": "proj_trk_5_11",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "vocal/teclados",
+      "start": 1982,
+      "end": 1982,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Oh, No! It's Devo (1982) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0151",
+      "person_id": "p_jerry",
+      "project_id": "proj_trk_5_11",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "baixo/vocal",
+      "start": 1982,
+      "end": 1982,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Oh, No! It's Devo (1982) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0152",
+      "person_id": "p_mark",
+      "project_id": "proj_trk_6_1",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "vocal/teclados",
+      "start": 1984,
+      "end": 1984,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Shout (1984) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0153",
+      "person_id": "p_jerry",
+      "project_id": "proj_trk_6_1",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "baixo/vocal",
+      "start": 1984,
+      "end": 1984,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Shout (1984) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0154",
+      "person_id": "p_mark",
+      "project_id": "proj_trk_6_2",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "vocal/teclados",
+      "start": 1984,
+      "end": 1984,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Shout (1984) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0155",
+      "person_id": "p_jerry",
+      "project_id": "proj_trk_6_2",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "baixo/vocal",
+      "start": 1984,
+      "end": 1984,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Shout (1984) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0156",
+      "person_id": "p_mark",
+      "project_id": "proj_trk_6_3",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "vocal/teclados",
+      "start": 1984,
+      "end": 1984,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Shout (1984) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0157",
+      "person_id": "p_jerry",
+      "project_id": "proj_trk_6_3",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "baixo/vocal",
+      "start": 1984,
+      "end": 1984,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Shout (1984) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0158",
+      "person_id": "p_mark",
+      "project_id": "proj_trk_6_4",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "vocal/teclados",
+      "start": 1984,
+      "end": 1984,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Shout (1984) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0159",
+      "person_id": "p_jerry",
+      "project_id": "proj_trk_6_4",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "baixo/vocal",
+      "start": 1984,
+      "end": 1984,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Shout (1984) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0160",
+      "person_id": "p_mark",
+      "project_id": "proj_trk_6_5",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "vocal/teclados",
+      "start": 1984,
+      "end": 1984,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Shout (1984) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0161",
+      "person_id": "p_jerry",
+      "project_id": "proj_trk_6_5",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "baixo/vocal",
+      "start": 1984,
+      "end": 1984,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Shout (1984) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0162",
+      "person_id": "p_mark",
+      "project_id": "proj_trk_6_6",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "vocal/teclados",
+      "start": 1984,
+      "end": 1984,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Shout (1984) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0163",
+      "person_id": "p_jerry",
+      "project_id": "proj_trk_6_6",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "baixo/vocal",
+      "start": 1984,
+      "end": 1984,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Shout (1984) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0164",
+      "person_id": "p_mark",
+      "project_id": "proj_trk_6_7",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "vocal/teclados",
+      "start": 1984,
+      "end": 1984,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Shout (1984) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0165",
+      "person_id": "p_jerry",
+      "project_id": "proj_trk_6_7",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "baixo/vocal",
+      "start": 1984,
+      "end": 1984,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Shout (1984) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0166",
+      "person_id": "p_mark",
+      "project_id": "proj_trk_6_8",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "vocal/teclados",
+      "start": 1984,
+      "end": 1984,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Shout (1984) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0167",
+      "person_id": "p_jerry",
+      "project_id": "proj_trk_6_8",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "baixo/vocal",
+      "start": 1984,
+      "end": 1984,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Shout (1984) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0168",
+      "person_id": "p_mark",
+      "project_id": "proj_trk_6_9",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "vocal/teclados",
+      "start": 1984,
+      "end": 1984,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Shout (1984) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0169",
+      "person_id": "p_jerry",
+      "project_id": "proj_trk_6_9",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "baixo/vocal",
+      "start": 1984,
+      "end": 1984,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Shout (1984) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0170",
+      "person_id": "p_mark",
+      "project_id": "proj_trk_6_10",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "vocal/teclados",
+      "start": 1984,
+      "end": 1984,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Shout (1984) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0171",
+      "person_id": "p_jerry",
+      "project_id": "proj_trk_6_10",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "baixo/vocal",
+      "start": 1984,
+      "end": 1984,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Shout (1984) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0172",
+      "person_id": "p_mark",
+      "project_id": "proj_trk_7_1",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "vocal/teclados",
+      "start": 1988,
+      "end": 1988,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Total Devo (1988) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0173",
+      "person_id": "p_jerry",
+      "project_id": "proj_trk_7_1",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "baixo/vocal",
+      "start": 1988,
+      "end": 1988,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Total Devo (1988) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0174",
+      "person_id": "p_mark",
+      "project_id": "proj_trk_7_2",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "vocal/teclados",
+      "start": 1988,
+      "end": 1988,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Total Devo (1988) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0175",
+      "person_id": "p_jerry",
+      "project_id": "proj_trk_7_2",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "baixo/vocal",
+      "start": 1988,
+      "end": 1988,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Total Devo (1988) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0176",
+      "person_id": "p_mark",
+      "project_id": "proj_trk_7_3",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "vocal/teclados",
+      "start": 1988,
+      "end": 1988,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Total Devo (1988) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0177",
+      "person_id": "p_jerry",
+      "project_id": "proj_trk_7_3",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "baixo/vocal",
+      "start": 1988,
+      "end": 1988,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Total Devo (1988) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0178",
+      "person_id": "p_mark",
+      "project_id": "proj_trk_7_4",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "vocal/teclados",
+      "start": 1988,
+      "end": 1988,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Total Devo (1988) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0179",
+      "person_id": "p_jerry",
+      "project_id": "proj_trk_7_4",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "baixo/vocal",
+      "start": 1988,
+      "end": 1988,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Total Devo (1988) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0180",
+      "person_id": "p_mark",
+      "project_id": "proj_trk_7_5",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "vocal/teclados",
+      "start": 1988,
+      "end": 1988,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Total Devo (1988) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0181",
+      "person_id": "p_jerry",
+      "project_id": "proj_trk_7_5",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "baixo/vocal",
+      "start": 1988,
+      "end": 1988,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Total Devo (1988) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0182",
+      "person_id": "p_mark",
+      "project_id": "proj_trk_7_6",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "vocal/teclados",
+      "start": 1988,
+      "end": 1988,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Total Devo (1988) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0183",
+      "person_id": "p_jerry",
+      "project_id": "proj_trk_7_6",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "baixo/vocal",
+      "start": 1988,
+      "end": 1988,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Total Devo (1988) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0184",
+      "person_id": "p_mark",
+      "project_id": "proj_trk_7_7",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "vocal/teclados",
+      "start": 1988,
+      "end": 1988,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Total Devo (1988) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0185",
+      "person_id": "p_jerry",
+      "project_id": "proj_trk_7_7",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "baixo/vocal",
+      "start": 1988,
+      "end": 1988,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Total Devo (1988) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0186",
+      "person_id": "p_mark",
+      "project_id": "proj_trk_7_8",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "vocal/teclados",
+      "start": 1988,
+      "end": 1988,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Total Devo (1988) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0187",
+      "person_id": "p_jerry",
+      "project_id": "proj_trk_7_8",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "baixo/vocal",
+      "start": 1988,
+      "end": 1988,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Total Devo (1988) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0188",
+      "person_id": "p_mark",
+      "project_id": "proj_trk_7_9",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "vocal/teclados",
+      "start": 1988,
+      "end": 1988,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Total Devo (1988) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0189",
+      "person_id": "p_jerry",
+      "project_id": "proj_trk_7_9",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "baixo/vocal",
+      "start": 1988,
+      "end": 1988,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Total Devo (1988) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0190",
+      "person_id": "p_mark",
+      "project_id": "proj_trk_7_10",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "vocal/teclados",
+      "start": 1988,
+      "end": 1988,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Total Devo (1988) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0191",
+      "person_id": "p_jerry",
+      "project_id": "proj_trk_7_10",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "baixo/vocal",
+      "start": 1988,
+      "end": 1988,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Total Devo (1988) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0192",
+      "person_id": "p_mark",
+      "project_id": "proj_trk_7_11",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "vocal/teclados",
+      "start": 1988,
+      "end": 1988,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Total Devo (1988) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0193",
+      "person_id": "p_jerry",
+      "project_id": "proj_trk_7_11",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "baixo/vocal",
+      "start": 1988,
+      "end": 1988,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Total Devo (1988) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0194",
+      "person_id": "p_mark",
+      "project_id": "proj_trk_7_12",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "vocal/teclados",
+      "start": 1988,
+      "end": 1988,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Total Devo (1988) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0195",
+      "person_id": "p_jerry",
+      "project_id": "proj_trk_7_12",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "baixo/vocal",
+      "start": 1988,
+      "end": 1988,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Total Devo (1988) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0196",
+      "person_id": "p_mark",
+      "project_id": "proj_trk_7_13",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "vocal/teclados",
+      "start": 1988,
+      "end": 1988,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Total Devo (1988) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0197",
+      "person_id": "p_jerry",
+      "project_id": "proj_trk_7_13",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "baixo/vocal",
+      "start": 1988,
+      "end": 1988,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Total Devo (1988) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0198",
+      "person_id": "p_mark",
+      "project_id": "proj_trk_8_1",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "vocal/teclados",
+      "start": 1990,
+      "end": 1990,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Smooth Noodle Maps (1990) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0199",
+      "person_id": "p_jerry",
+      "project_id": "proj_trk_8_1",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "baixo/vocal",
+      "start": 1990,
+      "end": 1990,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Smooth Noodle Maps (1990) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0200",
+      "person_id": "p_mark",
+      "project_id": "proj_trk_8_2",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "vocal/teclados",
+      "start": 1990,
+      "end": 1990,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Smooth Noodle Maps (1990) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0201",
+      "person_id": "p_jerry",
+      "project_id": "proj_trk_8_2",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "baixo/vocal",
+      "start": 1990,
+      "end": 1990,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Smooth Noodle Maps (1990) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0202",
+      "person_id": "p_mark",
+      "project_id": "proj_trk_8_3",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "vocal/teclados",
+      "start": 1990,
+      "end": 1990,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Smooth Noodle Maps (1990) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0203",
+      "person_id": "p_jerry",
+      "project_id": "proj_trk_8_3",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "baixo/vocal",
+      "start": 1990,
+      "end": 1990,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Smooth Noodle Maps (1990) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0204",
+      "person_id": "p_mark",
+      "project_id": "proj_trk_8_4",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "vocal/teclados",
+      "start": 1990,
+      "end": 1990,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Smooth Noodle Maps (1990) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0205",
+      "person_id": "p_jerry",
+      "project_id": "proj_trk_8_4",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "baixo/vocal",
+      "start": 1990,
+      "end": 1990,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Smooth Noodle Maps (1990) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0206",
+      "person_id": "p_mark",
+      "project_id": "proj_trk_8_5",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "vocal/teclados",
+      "start": 1990,
+      "end": 1990,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Smooth Noodle Maps (1990) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0207",
+      "person_id": "p_jerry",
+      "project_id": "proj_trk_8_5",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "baixo/vocal",
+      "start": 1990,
+      "end": 1990,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Smooth Noodle Maps (1990) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0208",
+      "person_id": "p_mark",
+      "project_id": "proj_trk_8_6",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "vocal/teclados",
+      "start": 1990,
+      "end": 1990,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Smooth Noodle Maps (1990) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0209",
+      "person_id": "p_jerry",
+      "project_id": "proj_trk_8_6",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "baixo/vocal",
+      "start": 1990,
+      "end": 1990,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Smooth Noodle Maps (1990) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0210",
+      "person_id": "p_mark",
+      "project_id": "proj_trk_8_7",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "vocal/teclados",
+      "start": 1990,
+      "end": 1990,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Smooth Noodle Maps (1990) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0211",
+      "person_id": "p_jerry",
+      "project_id": "proj_trk_8_7",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "baixo/vocal",
+      "start": 1990,
+      "end": 1990,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Smooth Noodle Maps (1990) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0212",
+      "person_id": "p_mark",
+      "project_id": "proj_trk_8_8",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "vocal/teclados",
+      "start": 1990,
+      "end": 1990,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Smooth Noodle Maps (1990) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0213",
+      "person_id": "p_jerry",
+      "project_id": "proj_trk_8_8",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "baixo/vocal",
+      "start": 1990,
+      "end": 1990,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Smooth Noodle Maps (1990) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0214",
+      "person_id": "p_mark",
+      "project_id": "proj_trk_8_9",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "vocal/teclados",
+      "start": 1990,
+      "end": 1990,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Smooth Noodle Maps (1990) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0215",
+      "person_id": "p_jerry",
+      "project_id": "proj_trk_8_9",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "baixo/vocal",
+      "start": 1990,
+      "end": 1990,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Smooth Noodle Maps (1990) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0216",
+      "person_id": "p_mark",
+      "project_id": "proj_trk_8_10",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "vocal/teclados",
+      "start": 1990,
+      "end": 1990,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Smooth Noodle Maps (1990) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0217",
+      "person_id": "p_jerry",
+      "project_id": "proj_trk_8_10",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "baixo/vocal",
+      "start": 1990,
+      "end": 1990,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Smooth Noodle Maps (1990) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0218",
+      "person_id": "p_mark",
+      "project_id": "proj_trk_8_11",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "vocal/teclados",
+      "start": 1990,
+      "end": 1990,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Smooth Noodle Maps (1990) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0219",
+      "person_id": "p_jerry",
+      "project_id": "proj_trk_8_11",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "baixo/vocal",
+      "start": 1990,
+      "end": 1990,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Smooth Noodle Maps (1990) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0220",
+      "person_id": "p_mark",
+      "project_id": "proj_trk_9_1",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "vocal/teclados",
+      "start": 2010,
+      "end": 2010,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Something for Everybody (2010) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0221",
+      "person_id": "p_jerry",
+      "project_id": "proj_trk_9_1",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "baixo/vocal",
+      "start": 2010,
+      "end": 2010,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Something for Everybody (2010) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0222",
+      "person_id": "p_mark",
+      "project_id": "proj_trk_9_2",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "vocal/teclados",
+      "start": 2010,
+      "end": 2010,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Something for Everybody (2010) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0223",
+      "person_id": "p_jerry",
+      "project_id": "proj_trk_9_2",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "baixo/vocal",
+      "start": 2010,
+      "end": 2010,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Something for Everybody (2010) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0224",
+      "person_id": "p_mark",
+      "project_id": "proj_trk_9_3",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "vocal/teclados",
+      "start": 2010,
+      "end": 2010,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Something for Everybody (2010) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0225",
+      "person_id": "p_jerry",
+      "project_id": "proj_trk_9_3",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "baixo/vocal",
+      "start": 2010,
+      "end": 2010,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Something for Everybody (2010) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0226",
+      "person_id": "p_mark",
+      "project_id": "proj_trk_9_4",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "vocal/teclados",
+      "start": 2010,
+      "end": 2010,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Something for Everybody (2010) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0227",
+      "person_id": "p_jerry",
+      "project_id": "proj_trk_9_4",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "baixo/vocal",
+      "start": 2010,
+      "end": 2010,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Something for Everybody (2010) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0228",
+      "person_id": "p_mark",
+      "project_id": "proj_trk_9_5",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "vocal/teclados",
+      "start": 2010,
+      "end": 2010,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Something for Everybody (2010) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0229",
+      "person_id": "p_jerry",
+      "project_id": "proj_trk_9_5",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "baixo/vocal",
+      "start": 2010,
+      "end": 2010,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Something for Everybody (2010) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0230",
+      "person_id": "p_mark",
+      "project_id": "proj_trk_9_6",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "vocal/teclados",
+      "start": 2010,
+      "end": 2010,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Something for Everybody (2010) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0231",
+      "person_id": "p_jerry",
+      "project_id": "proj_trk_9_6",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "baixo/vocal",
+      "start": 2010,
+      "end": 2010,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Something for Everybody (2010) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0232",
+      "person_id": "p_mark",
+      "project_id": "proj_trk_9_7",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "vocal/teclados",
+      "start": 2010,
+      "end": 2010,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Something for Everybody (2010) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0233",
+      "person_id": "p_jerry",
+      "project_id": "proj_trk_9_7",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "baixo/vocal",
+      "start": 2010,
+      "end": 2010,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Something for Everybody (2010) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0234",
+      "person_id": "p_mark",
+      "project_id": "proj_trk_9_8",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "vocal/teclados",
+      "start": 2010,
+      "end": 2010,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Something for Everybody (2010) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0235",
+      "person_id": "p_jerry",
+      "project_id": "proj_trk_9_8",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "baixo/vocal",
+      "start": 2010,
+      "end": 2010,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Something for Everybody (2010) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0236",
+      "person_id": "p_mark",
+      "project_id": "proj_trk_9_9",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "vocal/teclados",
+      "start": 2010,
+      "end": 2010,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Something for Everybody (2010) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0237",
+      "person_id": "p_jerry",
+      "project_id": "proj_trk_9_9",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "baixo/vocal",
+      "start": 2010,
+      "end": 2010,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Something for Everybody (2010) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0238",
+      "person_id": "p_mark",
+      "project_id": "proj_trk_9_10",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "vocal/teclados",
+      "start": 2010,
+      "end": 2010,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Something for Everybody (2010) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0239",
+      "person_id": "p_jerry",
+      "project_id": "proj_trk_9_10",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "baixo/vocal",
+      "start": 2010,
+      "end": 2010,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Something for Everybody (2010) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0240",
+      "person_id": "p_mark",
+      "project_id": "proj_trk_9_11",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "vocal/teclados",
+      "start": 2010,
+      "end": 2010,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Something for Everybody (2010) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0241",
+      "person_id": "p_jerry",
+      "project_id": "proj_trk_9_11",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "baixo/vocal",
+      "start": 2010,
+      "end": 2010,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Something for Everybody (2010) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0242",
+      "person_id": "p_mark",
+      "project_id": "proj_trk_9_12",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "vocal/teclados",
+      "start": 2010,
+      "end": 2010,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Something for Everybody (2010) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0243",
+      "person_id": "p_jerry",
+      "project_id": "proj_trk_9_12",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "baixo/vocal",
+      "start": 2010,
+      "end": 2010,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Something for Everybody (2010) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0244",
+      "person_id": "p_mark",
+      "project_id": "proj_trk_9_13",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "vocal/teclados",
+      "start": 2010,
+      "end": 2010,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Something for Everybody (2010) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0245",
+      "person_id": "p_jerry",
+      "project_id": "proj_trk_9_13",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "baixo/vocal",
+      "start": 2010,
+      "end": 2010,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Something for Everybody (2010) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0246",
+      "person_id": "p_mark",
+      "project_id": "proj_trk_9_14",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "vocal/teclados",
+      "start": 2010,
+      "end": 2010,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Something for Everybody (2010) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0247",
+      "person_id": "p_jerry",
+      "project_id": "proj_trk_9_14",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "baixo/vocal",
+      "start": 2010,
+      "end": 2010,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Something for Everybody (2010) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0248",
+      "person_id": "p_mark",
+      "project_id": "proj_trk_9_15",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "vocal/teclados",
+      "start": 2010,
+      "end": 2010,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Something for Everybody (2010) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0249",
+      "person_id": "p_jerry",
+      "project_id": "proj_trk_9_15",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "baixo/vocal",
+      "start": 2010,
+      "end": 2010,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Something for Everybody (2010) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0250",
+      "person_id": "p_mark",
+      "project_id": "proj_trk_9_16",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "vocal/teclados",
+      "start": 2010,
+      "end": 2010,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Something for Everybody (2010) registrada no MusicBrainz.",
+      "status": "confirmado"
+    },
+    {
+      "id": "r_0251",
+      "person_id": "p_jerry",
+      "project_id": "proj_trk_9_16",
+      "kind": "intérprete",
+      "grain": "faixa",
+      "instrument": "baixo/vocal",
+      "start": 2010,
+      "end": 2010,
+      "source_ids": [
+        "s_mb_rgs"
+      ],
+      "evidence": "Faixa de Something for Everybody (2010) registrada no MusicBrainz.",
+      "status": "confirmado"
+    }
+  ],
+  "releases": [
+    {
+      "id": "rel_1",
+      "project_id": "proj_devo",
+      "title": "Q: Are We Not Men? A: We Are Devo!",
+      "kind": "álbum",
+      "year": 1978,
+      "date": "1978-07",
+      "tracks": [
+        "Uncontrollable Urge",
+        "(I Can’t Get No) Satisfaction",
+        "Praying Hands",
+        "Space Junk",
+        "Mongoloid",
+        "Jocko Homo",
+        "Too Much Paranoias",
+        "Gut Feeling / (Slap Your Mammy)",
+        "Come Back Jonee",
+        "Sloppy (I Saw My Baby Gettin’)",
+        "Shrivel‐Up"
+      ],
+      "source_ids": [
+        "s_mb_rgs",
+        "s_wiki_discog"
+      ],
+      "status": "confirmado"
+    },
+    {
+      "id": "rel_2",
+      "project_id": "proj_devo",
+      "title": "Duty Now for the Future",
+      "kind": "álbum",
+      "year": 1979,
+      "date": "1979-06-07",
+      "tracks": [
+        "Devo Corporate Anthem",
+        "Clockout",
+        "Timing X",
+        "Wiggly World",
+        "Blockhead",
+        "Strange Pursuit",
+        "S.I.B. (Swelling Itching Brain)",
+        "Triumph of the Will",
+        "The Day My Baby Gave Me a Surprize",
+        "Pink Pussycat",
+        "Secret Agent Man",
+        "Smart Patrol / Mr. DNA",
+        "Red Eye"
+      ],
+      "source_ids": [
+        "s_mb_rgs",
+        "s_wiki_discog"
+      ],
+      "status": "confirmado"
+    },
+    {
+      "id": "rel_3",
+      "project_id": "proj_devo",
+      "title": "Freedom of Choice",
+      "kind": "álbum",
+      "year": 1980,
+      "date": "1980-05-16",
+      "tracks": [
+        "Girl U Want",
+        "It’s Not Right",
+        "Whip It",
+        "Snowball",
+        "Ton o’ Luv",
+        "Freedom of Choice",
+        "Gates of Steel",
+        "Cold War",
+        "Don’t You Know",
+        "That’s Pep!",
+        "Mr. B’s Ballroom",
+        "Planet Earth"
+      ],
+      "source_ids": [
+        "s_mb_rgs",
+        "s_wiki_discog"
+      ],
+      "status": "confirmado"
+    },
+    {
+      "id": "rel_4",
+      "project_id": "proj_devo",
+      "title": "New Traditionalists",
+      "kind": "álbum",
+      "year": 1981,
+      "date": "1981-08",
+      "tracks": [
+        "Through Being Cool",
+        "Jerkin’ Back ’n’ Forth",
+        "Pity You",
+        "Soft Things",
+        "Going Under",
+        "Race of Doom",
+        "Love Without Anger",
+        "The Super Thing",
+        "Beautiful World",
+        "Enough Said",
+        "Working in the Coal Mine",
+        "Working in the Coal Mine"
+      ],
+      "source_ids": [
+        "s_mb_rgs",
+        "s_wiki_discog"
+      ],
+      "status": "confirmado"
+    },
+    {
+      "id": "rel_5",
+      "project_id": "proj_devo",
+      "title": "Oh, No! It's Devo",
+      "kind": "álbum",
+      "year": 1982,
+      "date": "1982-11",
+      "tracks": [
+        "Time Out for Fun",
+        "Peek·A·Boo!",
+        "Out of Sync",
+        "Explosions",
+        "That’s Good",
+        "Patterns",
+        "Big Mess",
+        "Speed Racer",
+        "What I Must Do",
+        "I Desire",
+        "Deep Sleep"
+      ],
+      "source_ids": [
+        "s_mb_rgs",
+        "s_wiki_discog"
+      ],
+      "status": "confirmado"
+    },
+    {
+      "id": "rel_6",
+      "project_id": "proj_devo",
+      "title": "Shout",
+      "kind": "álbum",
+      "year": 1984,
+      "date": "1984-10-09",
+      "tracks": [
+        "Shout",
+        "The Satisfied Mind",
+        "Don’t Rescue Me",
+        "The 4th Dimension",
+        "C’mon",
+        "Here to Go",
+        "Jurisdiction of Love",
+        "Puppet Boy",
+        "Please Please",
+        "Are You Experienced?"
+      ],
+      "source_ids": [
+        "s_mb_rgs",
+        "s_wiki_discog"
+      ],
+      "status": "confirmado"
+    },
+    {
+      "id": "rel_7",
+      "project_id": "proj_devo",
+      "title": "Total Devo",
+      "kind": "álbum",
+      "year": 1988,
+      "date": "1988-05",
+      "tracks": [
+        "Baby Doll",
+        "Disco Dancer",
+        "Some Things Never Change",
+        "Plain Truth",
+        "Happy Guy",
+        "Don't Be Cruel",
+        "The Shadow",
+        "I'd Cry If You Died",
+        "Agitated",
+        "Man Turned Inside Out",
+        "Sexi Luv",
+        "Blow Up",
+        "Some Things Never Change (cassette version)"
+      ],
+      "source_ids": [
+        "s_mb_rgs",
+        "s_wiki_discog"
+      ],
+      "status": "confirmado"
+    },
+    {
+      "id": "rel_8",
+      "project_id": "proj_devo",
+      "title": "Smooth Noodle Maps",
+      "kind": "álbum",
+      "year": 1990,
+      "date": "1990-06",
+      "tracks": [
+        "Stuck in a Loop",
+        "Post Post‐Modern Man",
+        "When We Do It",
+        "Spin the Wheel",
+        "Morning Dew",
+        "A Change Is Gonna Cum",
+        "The Big Picture",
+        "Pink Jazz Trancers",
+        "Jimmy",
+        "DEVO Has Feelings Too",
+        "Dawghaus"
+      ],
+      "source_ids": [
+        "s_mb_rgs",
+        "s_wiki_discog"
+      ],
+      "status": "confirmado"
+    },
+    {
+      "id": "rel_9",
+      "project_id": "proj_devo",
+      "title": "Something for Everybody",
+      "kind": "álbum",
+      "year": 2010,
+      "date": "2010-06-15",
+      "tracks": [
+        "Fresh",
+        "What We Do",
+        "Please Baby Please",
+        "Don’t Shoot (I’m a Man)",
+        "Mind Games",
+        "Human Rocket",
+        "Sumthin’",
+        "Step Up",
+        "Cameo",
+        "Later Is Now",
+        "No Place Like Home",
+        "March On",
+        "Watch Us Work It",
+        "Signal Ready",
+        "Let’s Get to It",
+        "Knock Boots"
+      ],
+      "source_ids": [
+        "s_mb_rgs",
+        "s_wiki_discog"
+      ],
+      "status": "confirmado"
+    },
+    {
+      "id": "rel_10",
+      "project_id": "proj_devo",
+      "title": "DEV-O Live",
+      "kind": "ao_vivo",
+      "year": 1981,
+      "date": "1981",
+      "tracks": [
+        "Freedom of Choice",
+        "Whip It",
+        "Girl U Want",
+        "Gates of Steel"
+      ],
+      "source_ids": [
+        "s_clubdevo",
+        "s_wiki_discog"
+      ],
+      "status": "confirmado"
+    },
+    {
+      "id": "rel_11",
+      "project_id": "proj_devo",
+      "title": "Now It Can Be Told: DEVO at the Palace",
+      "kind": "ao_vivo",
+      "year": 1989,
+      "date": "1989",
+      "tracks": [
+        "Jerkin' Back 'n' Forth",
+        "Jocko Homo",
+        "Mongoloid"
+      ],
+      "source_ids": [
+        "s_clubdevo",
+        "s_wiki_discog"
+      ],
+      "status": "confirmado"
+    },
+    {
+      "id": "rel_12",
+      "project_id": "proj_devo",
+      "title": "Hardcore Devo, Vol. 1",
+      "kind": "coletânea",
+      "year": 1990,
+      "date": "1990",
+      "tracks": [
+        "Mechanical Man",
+        "Auto Modown",
+        "Space Girl Blues"
+      ],
+      "source_ids": [
+        "s_clubdevo",
+        "s_wiki_discog"
+      ],
+      "status": "confirmado"
+    },
+    {
+      "id": "rel_13",
+      "project_id": "proj_devo",
+      "title": "50 Years of De-Evolution (1973–2023)",
+      "kind": "coletânea",
+      "year": 2023,
+      "date": "2023-10-20",
+      "tracks": [
+        "Jocko Homo",
+        "Whip It",
+        "Beautiful World",
+        "Fresh"
+      ],
+      "source_ids": [
+        "s_clubdevo",
+        "s_wiki_discog"
+      ],
+      "status": "confirmado"
+    }
+  ],
+  "links": [
+    {
+      "id": "lk_001",
+      "title": "Praying Hands — Q: Are We Not Men? A: We Are Devo!",
+      "url": "https://www.youtube.com/watch?v=ZVpSAERbA-Q",
+      "direct": true,
+      "recording_id": "3ef59f93-7612-43f9-998a-57609d4cf2d5",
+      "source_ids": [
+        "s_yt_search",
+        "s_mb_rgs"
+      ],
+      "status": "não_verificado"
+    },
+    {
+      "id": "lk_002",
+      "title": "Mongoloid — Q: Are We Not Men? A: We Are Devo!",
+      "url": "https://www.youtube.com/watch?v=mtK6pdUKmio",
+      "direct": true,
+      "recording_id": "3b8d47c3-e99e-471a-8a34-1410377a1a70",
+      "source_ids": [
+        "s_yt_search",
+        "s_mb_rgs"
+      ],
+      "status": "não_verificado"
+    },
+    {
+      "id": "lk_003",
+      "title": "Jocko Homo — Q: Are We Not Men? A: We Are Devo!",
+      "url": "https://www.youtube.com/watch?v=5JdS-sSKsBc",
+      "direct": true,
+      "recording_id": "0116281b-93a8-49e3-95fa-30210c34d54b",
+      "source_ids": [
+        "s_yt_search",
+        "s_mb_rgs"
+      ],
+      "status": "não_verificado"
+    },
+    {
+      "id": "lk_004",
+      "title": "(I Can’t Get No) Satisfaction — Q: Are We Not Men? A: We Are Devo!",
+      "url": "https://www.youtube.com/watch?v=QmKQ2Z1odSc",
+      "direct": true,
+      "recording_id": "ddb269cb-ccb5-4f03-87b2-cb5179bc6403",
+      "source_ids": [
+        "s_yt_search",
+        "s_mb_rgs"
+      ],
+      "status": "não_verificado"
+    },
+    {
+      "id": "lk_005",
+      "title": "Uncontrollable Urge — Q: Are We Not Men? A: We Are Devo!",
+      "url": "https://www.youtube.com/watch?v=hYz90zeO3Kk",
+      "direct": true,
+      "recording_id": "b3ed4110-5514-4862-bc24-cdfad3e1f462",
+      "source_ids": [
+        "s_yt_search",
+        "s_mb_rgs"
+      ],
+      "status": "não_verificado"
+    },
+    {
+      "id": "lk_006",
+      "title": "Too Much Paranoias — Q: Are We Not Men? A: We Are Devo!",
+      "url": "https://www.youtube.com/watch?v=OEeJLTX1KYk",
+      "direct": true,
+      "recording_id": "063cdd7b-5fff-4070-bd55-51652c287f58",
+      "source_ids": [
+        "s_yt_search",
+        "s_mb_rgs"
+      ],
+      "status": "não_verificado"
+    },
+    {
+      "id": "lk_007",
+      "title": "Gut Feeling / (Slap Your Mammy) — Q: Are We Not Men? A: We Are Devo!",
+      "url": "https://www.youtube.com/watch?v=Ht9feOUAXV8",
+      "direct": true,
+      "recording_id": "89f4fc99-07a2-400c-9498-180af6944771",
+      "source_ids": [
+        "s_yt_search",
+        "s_mb_rgs"
+      ],
+      "status": "não_verificado"
+    },
+    {
+      "id": "lk_008",
+      "title": "Sloppy (I Saw My Baby Gettin’) — Q: Are We Not Men? A: We Are Devo!",
+      "url": "https://www.youtube.com/watch?v=kCkXTkN84js",
+      "direct": true,
+      "recording_id": "e353e04b-7e7e-4516-bea5-2e7378b06238",
+      "source_ids": [
+        "s_yt_search",
+        "s_mb_rgs"
+      ],
+      "status": "não_verificado"
+    },
+    {
+      "id": "lk_009",
+      "title": "Come Back Jonee — Q: Are We Not Men? A: We Are Devo!",
+      "url": "https://www.youtube.com/watch?v=n6QAfnpB9FQ",
+      "direct": true,
+      "recording_id": "40b5615d-30a4-40a3-b547-bf9586cac153",
+      "source_ids": [
+        "s_yt_search",
+        "s_mb_rgs"
+      ],
+      "status": "não_verificado"
+    },
+    {
+      "id": "lk_010",
+      "title": "Space Junk — Q: Are We Not Men? A: We Are Devo!",
+      "url": "https://www.youtube.com/watch?v=c7Shv0d0j4g",
+      "direct": true,
+      "recording_id": "11270039-bc03-4fa7-bca1-845cfd7848b3",
+      "source_ids": [
+        "s_yt_search",
+        "s_mb_rgs"
+      ],
+      "status": "não_verificado"
+    },
+    {
+      "id": "lk_011",
+      "title": "Devo Corporate Anthem — Duty Now for the Future",
+      "url": "https://www.youtube.com/watch?v=vsXcmkVUMDM",
+      "direct": true,
+      "recording_id": "21893a52-989e-4dcb-bb99-ce3e2ad91e28",
+      "source_ids": [
+        "s_yt_search",
+        "s_mb_rgs"
+      ],
+      "status": "não_verificado"
+    },
+    {
+      "id": "lk_012",
+      "title": "Clockout — Duty Now for the Future",
+      "url": "https://www.youtube.com/watch?v=FwJ0Pz0UTAU",
+      "direct": true,
+      "recording_id": "cd403c8f-1384-4b0b-9841-229eb1e7ab28",
+      "source_ids": [
+        "s_yt_search",
+        "s_mb_rgs"
+      ],
+      "status": "não_verificado"
+    },
+    {
+      "id": "lk_013",
+      "title": "Wiggly World — Duty Now for the Future",
+      "url": "https://www.youtube.com/watch?v=rBMZJtPK-Ok",
+      "direct": true,
+      "recording_id": "969a6961-ba93-4c9a-995d-732260a838b2",
+      "source_ids": [
+        "s_yt_search",
+        "s_mb_rgs"
+      ],
+      "status": "não_verificado"
+    },
+    {
+      "id": "lk_014",
+      "title": "Timing X — Duty Now for the Future",
+      "url": "https://www.youtube.com/watch?v=vZdKHAx7Wio",
+      "direct": true,
+      "recording_id": "a2b3b463-0ac7-4ca4-95a9-4de52a369efe",
+      "source_ids": [
+        "s_yt_search",
+        "s_mb_rgs"
+      ],
+      "status": "não_verificado"
+    },
+    {
+      "id": "lk_015",
+      "title": "Shrivel‐Up — Q: Are We Not Men? A: We Are Devo!",
+      "url": "https://www.youtube.com/watch?v=XE1ko5y1cSU",
+      "direct": true,
+      "recording_id": "dd4dc014-218e-492b-bb14-108945188590",
+      "source_ids": [
+        "s_yt_search",
+        "s_mb_rgs"
+      ],
+      "status": "não_verificado"
+    },
+    {
+      "id": "lk_016",
+      "title": "Blockhead — Duty Now for the Future",
+      "url": "https://www.youtube.com/watch?v=DV6c5EvY1pQ",
+      "direct": true,
+      "recording_id": "fccef022-9192-4176-9f78-f2a9035dcf00",
+      "source_ids": [
+        "s_yt_search",
+        "s_mb_rgs"
+      ],
+      "status": "não_verificado"
+    },
+    {
+      "id": "lk_017",
+      "title": "Strange Pursuit — Duty Now for the Future",
+      "url": "https://www.youtube.com/watch?v=yt98gKZQ5io",
+      "direct": true,
+      "recording_id": "5d5de348-3b1c-4d7f-b0a0-9162884f85c9",
+      "source_ids": [
+        "s_yt_search",
+        "s_mb_rgs"
+      ],
+      "status": "não_verificado"
+    },
+    {
+      "id": "lk_018",
+      "title": "S.I.B. (Swelling Itching Brain) — Duty Now for the Future",
+      "url": "https://www.youtube.com/watch?v=lJPVd8cTLBc",
+      "direct": true,
+      "recording_id": "64ac1e3b-f50e-45f3-8a0c-57bea89859bd",
+      "source_ids": [
+        "s_yt_search",
+        "s_mb_rgs"
+      ],
+      "status": "não_verificado"
+    },
+    {
+      "id": "lk_019",
+      "title": "Triumph of the Will — Duty Now for the Future",
+      "url": "https://www.youtube.com/watch?v=07S_fdJfYPM",
+      "direct": true,
+      "recording_id": "d6453c16-816e-4ea4-8713-681b6f2eed13",
+      "source_ids": [
+        "s_yt_search",
+        "s_mb_rgs"
+      ],
+      "status": "não_verificado"
+    },
+    {
+      "id": "lk_020",
+      "title": "The Day My Baby Gave Me a Surprize — Duty Now for the Future",
+      "url": "https://www.youtube.com/watch?v=VN32kQUHBK0",
+      "direct": true,
+      "recording_id": "33f06104-2a22-4a13-858a-0b06211d3696",
+      "source_ids": [
+        "s_yt_search",
+        "s_mb_rgs"
+      ],
+      "status": "não_verificado"
+    },
+    {
+      "id": "lk_021",
+      "title": "Pink Pussycat — Duty Now for the Future",
+      "url": "https://www.youtube.com/watch?v=q1LO9Xkc2QE",
+      "direct": true,
+      "recording_id": "0678296c-8469-402e-92d6-b9d4b6f6c50b",
+      "source_ids": [
+        "s_yt_search",
+        "s_mb_rgs"
+      ],
+      "status": "não_verificado"
+    },
+    {
+      "id": "lk_022",
+      "title": "Smart Patrol / Mr. DNA — Duty Now for the Future",
+      "url": "https://www.youtube.com/watch?v=AhK5A71nIos",
+      "direct": true,
+      "recording_id": "eb5bb76c-48f5-41f3-9580-766a14e8baee",
+      "source_ids": [
+        "s_yt_search",
+        "s_mb_rgs"
+      ],
+      "status": "não_verificado"
+    },
+    {
+      "id": "lk_023",
+      "title": "Red Eye — Duty Now for the Future",
+      "url": "https://www.youtube.com/watch?v=_OQzzOtuvdo",
+      "direct": true,
+      "recording_id": "732a189c-3aa7-476f-be19-249dcb9ef316",
+      "source_ids": [
+        "s_yt_search",
+        "s_mb_rgs"
+      ],
+      "status": "não_verificado"
+    },
+    {
+      "id": "lk_024",
+      "title": "Secret Agent Man — Duty Now for the Future",
+      "url": "https://www.youtube.com/watch?v=94fZi7_6wRE",
+      "direct": true,
+      "recording_id": "ae916ffa-9d27-4333-a3a8-3d9a654b4ebb",
+      "source_ids": [
+        "s_yt_search",
+        "s_mb_rgs"
+      ],
+      "status": "não_verificado"
+    },
+    {
+      "id": "lk_025",
+      "title": "Girl U Want — Freedom of Choice",
+      "url": "https://www.youtube.com/watch?v=g4-2onb62y8",
+      "direct": true,
+      "recording_id": "d93f5d49-cc76-4b4d-b2f0-bc71646e5ede",
+      "source_ids": [
+        "s_yt_search",
+        "s_mb_rgs"
+      ],
+      "status": "não_verificado"
+    },
+    {
+      "id": "lk_026",
+      "title": "Whip It — Freedom of Choice",
+      "url": "https://www.youtube.com/watch?v=j_QLzthSkfM",
+      "direct": true,
+      "recording_id": "428cba13-082c-46c5-bddb-a2cb1b7819b9",
+      "source_ids": [
+        "s_yt_search",
+        "s_mb_rgs"
+      ],
+      "status": "não_verificado"
+    },
+    {
+      "id": "lk_027",
+      "title": "Snowball — Freedom of Choice",
+      "url": "https://www.youtube.com/watch?v=UqFbbzbR8WA",
+      "direct": true,
+      "recording_id": "c07b330c-b6bd-47fd-8140-73af3b21c249",
+      "source_ids": [
+        "s_yt_search",
+        "s_mb_rgs"
+      ],
+      "status": "não_verificado"
+    },
+    {
+      "id": "lk_028",
+      "title": "Ton o’ Luv — Freedom of Choice",
+      "url": "https://www.youtube.com/watch?v=j9sKsF_4oHY",
+      "direct": true,
+      "recording_id": "e7ef5403-3573-4ea8-b824-656ea0f5f7ee",
+      "source_ids": [
+        "s_yt_search",
+        "s_mb_rgs"
+      ],
+      "status": "não_verificado"
+    },
+    {
+      "id": "lk_029",
+      "title": "Cold War — Freedom of Choice",
+      "url": "https://www.youtube.com/watch?v=95xs_762eb8",
+      "direct": true,
+      "recording_id": "189a4299-f02f-41f3-8c56-b54b0c1b848b",
+      "source_ids": [
+        "s_yt_search",
+        "s_mb_rgs"
+      ],
+      "status": "não_verificado"
+    },
+    {
+      "id": "lk_030",
+      "title": "Gates of Steel — Freedom of Choice",
+      "url": "https://www.youtube.com/watch?v=Vh_x--PJ7RQ",
+      "direct": true,
+      "recording_id": "d88f65da-8031-48b5-9986-81a6d7904776",
+      "source_ids": [
+        "s_yt_search",
+        "s_mb_rgs"
+      ],
+      "status": "não_verificado"
+    },
+    {
+      "id": "lk_031",
+      "title": "Freedom of Choice — Freedom of Choice",
+      "url": "https://www.youtube.com/watch?v=dVGINIsLnqU",
+      "direct": true,
+      "recording_id": "4d32efe7-dd41-4bec-b13d-108db3e09411",
+      "source_ids": [
+        "s_yt_search",
+        "s_mb_rgs"
+      ],
+      "status": "não_verificado"
+    },
+    {
+      "id": "lk_032",
+      "title": "Don’t You Know — Freedom of Choice",
+      "url": "https://www.youtube.com/watch?v=qPZkJ8BpWos",
+      "direct": true,
+      "recording_id": "1ca10381-1052-4dc1-a7bb-dac48b0d6f94",
+      "source_ids": [
+        "s_yt_search",
+        "s_mb_rgs"
+      ],
+      "status": "não_verificado"
+    },
+    {
+      "id": "lk_033",
+      "title": "It’s Not Right — Freedom of Choice",
+      "url": "https://www.youtube.com/watch?v=x9whxlHjdsY",
+      "direct": true,
+      "recording_id": "542f997d-bb9e-4411-9a09-8295cfe19bcf",
+      "source_ids": [
+        "s_yt_search",
+        "s_mb_rgs"
+      ],
+      "status": "não_verificado"
+    },
+    {
+      "id": "lk_034",
+      "title": "That’s Pep! — Freedom of Choice",
+      "url": "https://www.youtube.com/watch?v=CW5k9d_eVCk",
+      "direct": true,
+      "recording_id": "c4f61074-73ea-4824-95b4-bbbc4eba72c4",
+      "source_ids": [
+        "s_yt_search",
+        "s_mb_rgs"
+      ],
+      "status": "não_verificado"
+    },
+    {
+      "id": "lk_035",
+      "title": "Mr. B’s Ballroom — Freedom of Choice",
+      "url": "https://www.youtube.com/watch?v=-H0oXQDStvg",
+      "direct": true,
+      "recording_id": "7e573aa5-5a40-4541-b767-8eec3480a758",
+      "source_ids": [
+        "s_yt_search",
+        "s_mb_rgs"
+      ],
+      "status": "não_verificado"
+    },
+    {
+      "id": "lk_036",
+      "title": "Through Being Cool — New Traditionalists",
+      "url": "https://www.youtube.com/watch?v=Gnhnks1rt9Y",
+      "direct": true,
+      "recording_id": "6bc67a51-9ded-4b56-81ba-4ae10095e082",
+      "source_ids": [
+        "s_yt_search",
+        "s_mb_rgs"
+      ],
+      "status": "não_verificado"
+    },
+    {
+      "id": "lk_037",
+      "title": "Planet Earth — Freedom of Choice",
+      "url": "https://www.youtube.com/watch?v=cLvgcEMg7xA",
+      "direct": true,
+      "recording_id": "be773436-ec83-4fb9-88dd-1170444e03ac",
+      "source_ids": [
+        "s_yt_search",
+        "s_mb_rgs"
+      ],
+      "status": "não_verificado"
+    },
+    {
+      "id": "lk_038",
+      "title": "Pity You — New Traditionalists",
+      "url": "https://www.youtube.com/watch?v=LbO6v1pI0eQ",
+      "direct": true,
+      "recording_id": "12bc1301-4b96-4f40-9197-245def2eb220",
+      "source_ids": [
+        "s_yt_search",
+        "s_mb_rgs"
+      ],
+      "status": "não_verificado"
+    },
+    {
+      "id": "lk_039",
+      "title": "Soft Things — New Traditionalists",
+      "url": "https://www.youtube.com/watch?v=2_MIS37ylks",
+      "direct": true,
+      "recording_id": "e9c6ef61-20ef-46c7-8b7e-58e580dd4588",
+      "source_ids": [
+        "s_yt_search",
+        "s_mb_rgs"
+      ],
+      "status": "não_verificado"
+    },
+    {
+      "id": "lk_040",
+      "title": "Going Under — New Traditionalists",
+      "url": "https://www.youtube.com/watch?v=6B702b-8_gA",
+      "direct": true,
+      "recording_id": "05cecec1-18d3-403e-a09d-d0839ac50f42",
+      "source_ids": [
+        "s_yt_search",
+        "s_mb_rgs"
+      ],
+      "status": "não_verificado"
+    },
+    {
+      "id": "lk_041",
+      "title": "Love Without Anger — New Traditionalists",
+      "url": "https://www.youtube.com/watch?v=GoyRWjzfWAw",
+      "direct": true,
+      "recording_id": "ba02406a-c1ed-4450-8f73-ba140cefb4da",
+      "source_ids": [
+        "s_yt_search",
+        "s_mb_rgs"
+      ],
+      "status": "não_verificado"
+    },
+    {
+      "id": "lk_042",
+      "title": "Race of Doom — New Traditionalists",
+      "url": "https://www.youtube.com/watch?v=rds2uJqJaAY",
+      "direct": true,
+      "recording_id": "043aea8a-531e-4ff4-b41b-a6eb47c76c37",
+      "source_ids": [
+        "s_yt_search",
+        "s_mb_rgs"
+      ],
+      "status": "não_verificado"
+    },
+    {
+      "id": "lk_043",
+      "title": "The Super Thing — New Traditionalists",
+      "url": "https://www.youtube.com/watch?v=G5katrlyjjQ",
+      "direct": true,
+      "recording_id": "41ce2d47-838f-4bfc-849e-8c4472f6b2bf",
+      "source_ids": [
+        "s_yt_search",
+        "s_mb_rgs"
+      ],
+      "status": "não_verificado"
+    },
+    {
+      "id": "lk_044",
+      "title": "Beautiful World — New Traditionalists",
+      "url": "https://www.youtube.com/watch?v=E-gbYjLd93g",
+      "direct": true,
+      "recording_id": "b4df68cb-6f30-463e-88ed-0a356d67ac7a",
+      "source_ids": [
+        "s_yt_search",
+        "s_mb_rgs"
+      ],
+      "status": "não_verificado"
+    },
+    {
+      "id": "lk_045",
+      "title": "Working in the Coal Mine — New Traditionalists",
+      "url": "https://www.youtube.com/watch?v=KUS0_HzcJ00",
+      "direct": true,
+      "recording_id": "bc0008a0-5fdf-43d6-81b6-1490b9d0ca1b",
+      "source_ids": [
+        "s_yt_search",
+        "s_mb_rgs"
+      ],
+      "status": "não_verificado"
+    },
+    {
+      "id": "lk_046",
+      "title": "Enough Said — New Traditionalists",
+      "url": "https://www.youtube.com/watch?v=3ruyasTzwPA",
+      "direct": true,
+      "recording_id": "1557dd78-f37a-4773-913d-d9a2959fb449",
+      "source_ids": [
+        "s_yt_search",
+        "s_mb_rgs"
+      ],
+      "status": "não_verificado"
+    },
+    {
+      "id": "lk_047",
+      "title": "Time Out for Fun — Oh, No! It's Devo",
+      "url": "https://www.youtube.com/watch?v=1ZUQ59UjCR0",
+      "direct": true,
+      "recording_id": "92627143-e8c0-4ef1-a237-1c40129b9eac",
+      "source_ids": [
+        "s_yt_search",
+        "s_mb_rgs"
+      ],
+      "status": "não_verificado"
+    },
+    {
+      "id": "lk_048",
+      "title": "Out of Sync — Oh, No! It's Devo",
+      "url": "https://www.youtube.com/watch?v=6pOac4fZph8",
+      "direct": true,
+      "recording_id": "5d10030e-8eb2-40a3-abc2-85a2d03214c9",
+      "source_ids": [
+        "s_yt_search",
+        "s_mb_rgs"
+      ],
+      "status": "não_verificado"
+    },
+    {
+      "id": "lk_049",
+      "title": "Peek·A·Boo! — Oh, No! It's Devo",
+      "url": "https://www.youtube.com/watch?v=ZBRREj1CLpQ",
+      "direct": true,
+      "recording_id": "70513ba4-97ce-4ca5-9705-fbb0849e9e29",
+      "source_ids": [
+        "s_yt_search",
+        "s_mb_rgs"
+      ],
+      "status": "não_verificado"
+    },
+    {
+      "id": "lk_050",
+      "title": "Explosions — Oh, No! It's Devo",
+      "url": "https://www.youtube.com/watch?v=9_EELAlqhok",
+      "direct": true,
+      "recording_id": "8b6a383d-92f5-49cd-97e4-b0f646343844",
+      "source_ids": [
+        "s_yt_search",
+        "s_mb_rgs"
+      ],
+      "status": "não_verificado"
+    },
+    {
+      "id": "lk_051",
+      "title": "That’s Good — Oh, No! It's Devo",
+      "url": "https://www.youtube.com/watch?v=uGdCTy-Vm7o",
+      "direct": true,
+      "recording_id": "87fe7259-0792-40cd-aecf-67391e5fa1a1",
+      "source_ids": [
+        "s_yt_search",
+        "s_mb_rgs"
+      ],
+      "status": "não_verificado"
+    },
+    {
+      "id": "lk_052",
+      "title": "Patterns — Oh, No! It's Devo",
+      "url": "https://www.youtube.com/watch?v=KlckKwA85Qw",
+      "direct": true,
+      "recording_id": "a912a281-04ef-43c1-973f-6bb2928b4d03",
+      "source_ids": [
+        "s_yt_search",
+        "s_mb_rgs"
+      ],
+      "status": "não_verificado"
+    },
+    {
+      "id": "lk_053",
+      "title": "Speed Racer — Oh, No! It's Devo",
+      "url": "https://www.youtube.com/watch?v=UQWlA2CLRSY",
+      "direct": true,
+      "recording_id": "298bdf58-8090-4941-b032-87fee8d44ffe",
+      "source_ids": [
+        "s_yt_search",
+        "s_mb_rgs"
+      ],
+      "status": "não_verificado"
+    },
+    {
+      "id": "lk_054",
+      "title": "Big Mess — Oh, No! It's Devo",
+      "url": "https://www.youtube.com/watch?v=qJDrnn_4yxk",
+      "direct": true,
+      "recording_id": "88494c99-5e15-425a-9ba7-50373f5a5e2d",
+      "source_ids": [
+        "s_yt_search",
+        "s_mb_rgs"
+      ],
+      "status": "não_verificado"
+    },
+    {
+      "id": "lk_055",
+      "title": "I Desire — Oh, No! It's Devo",
+      "url": "https://www.youtube.com/watch?v=QmtoqcmK0OI",
+      "direct": true,
+      "recording_id": "e39f9e18-8f2a-4d97-b6cc-aac358a5c35d",
+      "source_ids": [
+        "s_yt_search",
+        "s_mb_rgs"
+      ],
+      "status": "não_verificado"
+    },
+    {
+      "id": "lk_056",
+      "title": "What I Must Do — Oh, No! It's Devo",
+      "url": "https://www.youtube.com/watch?v=xyrRXuFOSDU",
+      "direct": true,
+      "recording_id": "b0cb5901-2534-4c01-9890-be071b2269da",
+      "source_ids": [
+        "s_yt_search",
+        "s_mb_rgs"
+      ],
+      "status": "não_verificado"
+    },
+    {
+      "id": "lk_057",
+      "title": "Shout — Shout",
+      "url": "https://www.youtube.com/watch?v=7yYVWtXTz-k",
+      "direct": true,
+      "recording_id": "79289fb1-4aee-46c5-9139-b3010b0a2bf5",
+      "source_ids": [
+        "s_yt_search",
+        "s_mb_rgs"
+      ],
+      "status": "não_verificado"
+    },
+    {
+      "id": "lk_058",
+      "title": "The 4th Dimension — Shout",
+      "url": "https://www.youtube.com/watch?v=LuXSpA48nAc",
+      "direct": true,
+      "recording_id": "de5fac7a-6849-4511-b9ae-cf2ced4b71dd",
+      "source_ids": [
+        "s_yt_search",
+        "s_mb_rgs"
+      ],
+      "status": "não_verificado"
+    },
+    {
+      "id": "lk_059",
+      "title": "C’mon — Shout",
+      "url": "https://www.youtube.com/watch?v=UgRifiNoDD8",
+      "direct": true,
+      "recording_id": "cb10f997-5d57-46d4-8d5a-927a192c0d6c",
+      "source_ids": [
+        "s_yt_search",
+        "s_mb_rgs"
+      ],
+      "status": "não_verificado"
+    },
+    {
+      "id": "lk_060",
+      "title": "Don’t Rescue Me — Shout",
+      "url": "https://www.youtube.com/watch?v=EFvR8FPLsgs",
+      "direct": true,
+      "recording_id": "3d9c8f3f-8d11-4a50-8344-ed77e972a8ce",
+      "source_ids": [
+        "s_yt_search",
+        "s_mb_rgs"
+      ],
+      "status": "não_verificado"
+    },
+    {
+      "id": "lk_061",
+      "title": "Deep Sleep — Oh, No! It's Devo",
+      "url": "https://www.youtube.com/watch?v=NG3gOFfAv0Y",
+      "direct": true,
+      "recording_id": "755f2927-9a49-4c94-a45d-d0ff172dd222",
+      "source_ids": [
+        "s_yt_search",
+        "s_mb_rgs"
+      ],
+      "status": "não_verificado"
+    },
+    {
+      "id": "lk_062",
+      "title": "Here to Go — Shout",
+      "url": "https://www.youtube.com/watch?v=tcpUi_4hLvU",
+      "direct": true,
+      "recording_id": "5a54f049-0966-4e29-a2be-13b46e487fd4",
+      "source_ids": [
+        "s_yt_search",
+        "s_mb_rgs"
+      ],
+      "status": "não_verificado"
+    },
+    {
+      "id": "lk_063",
+      "title": "The Satisfied Mind — Shout",
+      "url": "https://www.youtube.com/watch?v=fAmmwEgPHaQ",
+      "direct": true,
+      "recording_id": "987aaaa1-057e-46af-8b9f-dc5c3e97672b",
+      "source_ids": [
+        "s_yt_search",
+        "s_mb_rgs"
+      ],
+      "status": "não_verificado"
+    },
+    {
+      "id": "lk_064",
+      "title": "Jurisdiction of Love — Shout",
+      "url": "https://www.youtube.com/watch?v=LPq_5_NG-S4",
+      "direct": true,
+      "recording_id": "aa6013d0-c687-491e-8368-03fc94ae6bbf",
+      "source_ids": [
+        "s_yt_search",
+        "s_mb_rgs"
+      ],
+      "status": "não_verificado"
+    },
+    {
+      "id": "lk_065",
+      "title": "Puppet Boy — Shout",
+      "url": "https://www.youtube.com/watch?v=jKt0l6x399E",
+      "direct": true,
+      "recording_id": "2090d684-ac4b-43b0-8545-ddc4413b79d9",
+      "source_ids": [
+        "s_yt_search",
+        "s_mb_rgs"
+      ],
+      "status": "não_verificado"
+    },
+    {
+      "id": "lk_066",
+      "title": "Please Please — Shout",
+      "url": "https://www.youtube.com/watch?v=j4-mMfC4cEA",
+      "direct": true,
+      "recording_id": "a8e699ff-1ef1-4dbc-892b-165cc41f7343",
+      "source_ids": [
+        "s_yt_search",
+        "s_mb_rgs"
+      ],
+      "status": "não_verificado"
+    },
+    {
+      "id": "lk_067",
+      "title": "Are You Experienced? — Shout",
+      "url": "https://www.youtube.com/watch?v=JP8Eo24rNm8",
+      "direct": true,
+      "recording_id": "a39aa5f1-a7d6-49df-9082-a03bdfa15aaf",
+      "source_ids": [
+        "s_yt_search",
+        "s_mb_rgs"
+      ],
+      "status": "não_verificado"
+    },
+    {
+      "id": "lk_068",
+      "title": "Baby Doll — Total Devo",
+      "url": "https://www.youtube.com/watch?v=Tt2q6AU1Dog",
+      "direct": true,
+      "recording_id": "998c83a1-ba0f-4dd7-910a-4a9c2fc46f54",
+      "source_ids": [
+        "s_yt_search",
+        "s_mb_rgs"
+      ],
+      "status": "não_verificado"
+    },
+    {
+      "id": "lk_069",
+      "title": "Disco Dancer — Total Devo",
+      "url": "https://www.youtube.com/watch?v=D10fcw2_Plc",
+      "direct": true,
+      "recording_id": "4f15cf2b-a859-4949-8c84-f0426af06ba5",
+      "source_ids": [
+        "s_yt_search",
+        "s_mb_rgs"
+      ],
+      "status": "não_verificado"
+    },
+    {
+      "id": "lk_070",
+      "title": "Some Things Never Change — Total Devo",
+      "url": "https://www.youtube.com/watch?v=Nf8OmnRIBvA",
+      "direct": true,
+      "recording_id": "2ede8e79-bdd7-4627-80b7-f0777a45b64a",
+      "source_ids": [
+        "s_yt_search",
+        "s_mb_rgs"
+      ],
+      "status": "não_verificado"
+    },
+    {
+      "id": "lk_071",
+      "title": "Plain Truth — Total Devo",
+      "url": "https://www.youtube.com/watch?v=WVowyAtZY7I",
+      "direct": true,
+      "recording_id": "70cfaad2-ba6a-4a1a-8061-2b65855a0e4f",
+      "source_ids": [
+        "s_yt_search",
+        "s_mb_rgs"
+      ],
+      "status": "não_verificado"
+    },
+    {
+      "id": "lk_072",
+      "title": "Happy Guy — Total Devo",
+      "url": "https://www.youtube.com/watch?v=uuQu1VqU7Ms",
+      "direct": true,
+      "recording_id": "70e2936e-c205-4a1d-9d3c-527dfc49b331",
+      "source_ids": [
+        "s_yt_search",
+        "s_mb_rgs"
+      ],
+      "status": "não_verificado"
+    },
+    {
+      "id": "lk_073",
+      "title": "The Shadow — Total Devo",
+      "url": "https://www.youtube.com/watch?v=sMs9QVzCMOY",
+      "direct": true,
+      "recording_id": "a0a8c5c6-66a5-4183-954c-3e0670ba8ad2",
+      "source_ids": [
+        "s_yt_search",
+        "s_mb_rgs"
+      ],
+      "status": "não_verificado"
+    },
+    {
+      "id": "lk_074",
+      "title": "Don't Be Cruel — Total Devo",
+      "url": "https://www.youtube.com/watch?v=Z46b2xNTT1M",
+      "direct": true,
+      "recording_id": "9ff32fac-ccb3-4599-82fc-7dde099b5fb1",
+      "source_ids": [
+        "s_yt_search",
+        "s_mb_rgs"
+      ],
+      "status": "não_verificado"
+    },
+    {
+      "id": "lk_075",
+      "title": "Man Turned Inside Out — Total Devo",
+      "url": "https://www.youtube.com/watch?v=KGkuAUWkpXw",
+      "direct": true,
+      "recording_id": "b2a018eb-9ea1-45e7-bae0-cda91cd0d686",
+      "source_ids": [
+        "s_yt_search",
+        "s_mb_rgs"
+      ],
+      "status": "não_verificado"
+    },
+    {
+      "id": "lk_076",
+      "title": "I'd Cry If You Died — Total Devo",
+      "url": "https://www.youtube.com/watch?v=EkadRRkzi2Y",
+      "direct": true,
+      "recording_id": "137e6c31-d432-48e9-bfa3-b5897fe5b279",
+      "source_ids": [
+        "s_yt_search",
+        "s_mb_rgs"
+      ],
+      "status": "não_verificado"
+    },
+    {
+      "id": "lk_077",
+      "title": "Some Things Never Change (cassette version) — Total Devo",
+      "url": "https://www.youtube.com/watch?v=Ekbk38B7xh8",
+      "direct": true,
+      "recording_id": "31ecdadc-dcc4-45de-8298-601c27014b79",
+      "source_ids": [
+        "s_yt_search",
+        "s_mb_rgs"
+      ],
+      "status": "não_verificado"
+    },
+    {
+      "id": "lk_078",
+      "title": "Agitated — Total Devo",
+      "url": "https://www.youtube.com/watch?v=athy05H5Scc",
+      "direct": true,
+      "recording_id": "e344ab10-dac7-4632-af93-86f689cbf6c3",
+      "source_ids": [
+        "s_yt_search",
+        "s_mb_rgs"
+      ],
+      "status": "não_verificado"
+    },
+    {
+      "id": "lk_079",
+      "title": "Blow Up — Total Devo",
+      "url": "https://www.youtube.com/watch?v=z_Sc8njO0GI",
+      "direct": true,
+      "recording_id": "dc11afff-7cde-44b8-9a64-c706aa70ee4f",
+      "source_ids": [
+        "s_yt_search",
+        "s_mb_rgs"
+      ],
+      "status": "não_verificado"
+    },
+    {
+      "id": "lk_080",
+      "title": "Stuck in a Loop — Smooth Noodle Maps",
+      "url": "https://www.youtube.com/watch?v=he8oyAkUxnc",
+      "direct": true,
+      "recording_id": "3e85a6e9-e549-4dfd-b2a2-504dbe37ea26",
+      "source_ids": [
+        "s_yt_search",
+        "s_mb_rgs"
+      ],
+      "status": "não_verificado"
+    },
+    {
+      "id": "lk_081",
+      "title": "Post Post‐Modern Man — Smooth Noodle Maps",
+      "url": "https://www.youtube.com/watch?v=jCJoe_4eYU4",
+      "direct": true,
+      "recording_id": "d58f82fb-89d8-4580-a604-7b1382caa1f5",
+      "source_ids": [
+        "s_yt_search",
+        "s_mb_rgs"
+      ],
+      "status": "não_verificado"
+    },
+    {
+      "id": "lk_082",
+      "title": "When We Do It — Smooth Noodle Maps",
+      "url": "https://www.youtube.com/watch?v=q_nlFoTqxmA",
+      "direct": true,
+      "recording_id": "44ef0126-4789-4913-b00d-fc843502fd2e",
+      "source_ids": [
+        "s_yt_search",
+        "s_mb_rgs"
+      ],
+      "status": "não_verificado"
+    },
+    {
+      "id": "lk_083",
+      "title": "Spin the Wheel — Smooth Noodle Maps",
+      "url": "https://www.youtube.com/watch?v=vQ4NpRlcTOs",
+      "direct": true,
+      "recording_id": "94bea38a-46aa-4efe-be1a-82d7daef2a4e",
+      "source_ids": [
+        "s_yt_search",
+        "s_mb_rgs"
+      ],
+      "status": "não_verificado"
+    },
+    {
+      "id": "lk_084",
+      "title": "Morning Dew — Smooth Noodle Maps",
+      "url": "https://www.youtube.com/watch?v=dCZM1NnbVfE",
+      "direct": true,
+      "recording_id": "2b771228-ac12-4bd8-be56-b81740bcd6bc",
+      "source_ids": [
+        "s_yt_search",
+        "s_mb_rgs"
+      ],
+      "status": "não_verificado"
+    },
+    {
+      "id": "lk_085",
+      "title": "The Big Picture — Smooth Noodle Maps",
+      "url": "https://www.youtube.com/watch?v=2oqsrKPL5Go",
+      "direct": true,
+      "recording_id": "e157638c-1f7a-4bfc-9155-a88f01dc1515",
+      "source_ids": [
+        "s_yt_search",
+        "s_mb_rgs"
+      ],
+      "status": "não_verificado"
+    },
+    {
+      "id": "lk_086",
+      "title": "Pink Jazz Trancers — Smooth Noodle Maps",
+      "url": "https://www.youtube.com/watch?v=C06ip8qqtOk",
+      "direct": true,
+      "recording_id": "227f0c31-d7ee-4484-a633-51d80637bc5c",
+      "source_ids": [
+        "s_yt_search",
+        "s_mb_rgs"
+      ],
+      "status": "não_verificado"
+    },
+    {
+      "id": "lk_087",
+      "title": "Jimmy — Smooth Noodle Maps",
+      "url": "https://www.youtube.com/watch?v=x5UvGMD_nss",
+      "direct": true,
+      "recording_id": "d7c4caeb-9c8b-4f01-890d-64521e6d565f",
+      "source_ids": [
+        "s_yt_search",
+        "s_mb_rgs"
+      ],
+      "status": "não_verificado"
+    },
+    {
+      "id": "lk_088",
+      "title": "DEVO Has Feelings Too — Smooth Noodle Maps",
+      "url": "https://www.youtube.com/watch?v=Rc8xqhhclSs",
+      "direct": true,
+      "recording_id": "7ce8b3d7-be73-465c-b08a-d13fe0eb4e91",
+      "source_ids": [
+        "s_yt_search",
+        "s_mb_rgs"
+      ],
+      "status": "não_verificado"
+    },
+    {
+      "id": "lk_089",
+      "title": "Dawghaus — Smooth Noodle Maps",
+      "url": "https://www.youtube.com/watch?v=CLu7SwNtfvI",
+      "direct": true,
+      "recording_id": "c287d5b4-6ef8-4d66-9438-3c49bbec9239",
+      "source_ids": [
+        "s_yt_search",
+        "s_mb_rgs"
+      ],
+      "status": "não_verificado"
+    },
+    {
+      "id": "lk_090",
+      "title": "Fresh — Something for Everybody",
+      "url": "https://www.youtube.com/watch?v=3DhIjT6T_qo",
+      "direct": true,
+      "recording_id": "817837ad-c0eb-43ae-9849-0077af5169b2",
+      "source_ids": [
+        "s_yt_search",
+        "s_mb_rgs"
+      ],
+      "status": "não_verificado"
+    },
+    {
+      "id": "lk_091",
+      "title": "What We Do — Something for Everybody",
+      "url": "https://www.youtube.com/watch?v=Bp2tQ75pTD0",
+      "direct": true,
+      "recording_id": "2a763f1a-f76f-494a-bd2b-adab2a773fde",
+      "source_ids": [
+        "s_yt_search",
+        "s_mb_rgs"
+      ],
+      "status": "não_verificado"
+    },
+    {
+      "id": "lk_092",
+      "title": "Please Baby Please — Something for Everybody",
+      "url": "https://www.youtube.com/watch?v=l1qNFbQyAgk",
+      "direct": true,
+      "recording_id": "9a9bb308-1991-49c5-bc24-a21f9d677de1",
+      "source_ids": [
+        "s_yt_search",
+        "s_mb_rgs"
+      ],
+      "status": "não_verificado"
+    },
+    {
+      "id": "lk_093",
+      "title": "Don’t Shoot (I’m a Man) — Something for Everybody",
+      "url": "https://www.youtube.com/watch?v=cKxhlXZ3hcY",
+      "direct": true,
+      "recording_id": "0f835700-2463-4ef3-83c6-58171ecb2a01",
+      "source_ids": [
+        "s_yt_search",
+        "s_mb_rgs"
+      ],
+      "status": "não_verificado"
+    },
+    {
+      "id": "lk_094",
+      "title": "Mind Games — Something for Everybody",
+      "url": "https://www.youtube.com/watch?v=9Su2OA_Omrg",
+      "direct": true,
+      "recording_id": "194fbd61-0773-45bb-97d4-67ac3cac3172",
+      "source_ids": [
+        "s_yt_search",
+        "s_mb_rgs"
+      ],
+      "status": "não_verificado"
+    },
+    {
+      "id": "lk_095",
+      "title": "Human Rocket — Something for Everybody",
+      "url": "https://www.youtube.com/watch?v=cWgwy_7hN5c",
+      "direct": true,
+      "recording_id": "aded518b-6331-40d6-9751-dc216cc584b1",
+      "source_ids": [
+        "s_yt_search",
+        "s_mb_rgs"
+      ],
+      "status": "não_verificado"
+    },
+    {
+      "id": "lk_096",
+      "title": "Sumthin’ — Something for Everybody",
+      "url": "https://www.youtube.com/watch?v=6YmS36fCIg4",
+      "direct": true,
+      "recording_id": "ce84f57e-0dee-4847-94bf-d23fa736aaf6",
+      "source_ids": [
+        "s_yt_search",
+        "s_mb_rgs"
+      ],
+      "status": "não_verificado"
+    },
+    {
+      "id": "lk_097",
+      "title": "Cameo — Something for Everybody",
+      "url": "https://www.youtube.com/watch?v=GVaAZ4TC860",
+      "direct": true,
+      "recording_id": "6281854f-e574-4d6a-944a-21a02c960702",
+      "source_ids": [
+        "s_yt_search",
+        "s_mb_rgs"
+      ],
+      "status": "não_verificado"
+    },
+    {
+      "id": "lk_098",
+      "title": "Later Is Now — Something for Everybody",
+      "url": "https://www.youtube.com/watch?v=8avIuShZXkA",
+      "direct": true,
+      "recording_id": "2a6f2dd9-a708-44df-85b5-6437315655d6",
+      "source_ids": [
+        "s_yt_search",
+        "s_mb_rgs"
+      ],
+      "status": "não_verificado"
+    },
+    {
+      "id": "lk_099",
+      "title": "Step Up — Something for Everybody",
+      "url": "https://www.youtube.com/watch?v=v-W9kyb9A6Y",
+      "direct": true,
+      "recording_id": "cda19a72-1798-4b22-bf3d-3a8fcc505c45",
+      "source_ids": [
+        "s_yt_search",
+        "s_mb_rgs"
+      ],
+      "status": "não_verificado"
+    },
+    {
+      "id": "lk_100",
+      "title": "No Place Like Home — Something for Everybody",
+      "url": "https://www.youtube.com/watch?v=UGTEWIK0orA",
+      "direct": true,
+      "recording_id": "55fa447f-718a-4a88-bd56-906b9322fcdc",
+      "source_ids": [
+        "s_yt_search",
+        "s_mb_rgs"
+      ],
+      "status": "não_verificado"
+    },
+    {
+      "id": "lk_101",
+      "title": "March On — Something for Everybody",
+      "url": "https://www.youtube.com/watch?v=bIiFrRqWTuI",
+      "direct": true,
+      "recording_id": "9501556d-7773-432d-971e-917619f11323",
+      "source_ids": [
+        "s_yt_search",
+        "s_mb_rgs"
+      ],
+      "status": "não_verificado"
+    },
+    {
+      "id": "lk_102",
+      "title": "Watch Us Work It — Something for Everybody",
+      "url": "https://www.youtube.com/watch?v=NCZcIrSAT7I",
+      "direct": true,
+      "recording_id": "3b87e455-eeab-4a0c-b522-6d315ad6b078",
+      "source_ids": [
+        "s_yt_search",
+        "s_mb_rgs"
+      ],
+      "status": "não_verificado"
+    },
+    {
+      "id": "lk_103",
+      "title": "Signal Ready — Something for Everybody",
+      "url": "https://www.youtube.com/watch?v=eAYGxpWVwF8",
+      "direct": true,
+      "recording_id": "7ebf87a9-4ce2-465d-ad0d-46c394180fd3",
+      "source_ids": [
+        "s_yt_search",
+        "s_mb_rgs"
+      ],
+      "status": "não_verificado"
+    },
+    {
+      "id": "lk_104",
+      "title": "Knock Boots — Something for Everybody",
+      "url": "https://www.youtube.com/watch?v=42E5a_i95_k",
+      "direct": true,
+      "recording_id": "51deb6bc-2811-4fa1-88b1-5a7eeb50cb2d",
+      "source_ids": [
+        "s_yt_search",
+        "s_mb_rgs"
+      ],
+      "status": "não_verificado"
+    },
+    {
+      "id": "lk_105",
+      "title": "Let’s Get to It — Something for Everybody",
+      "url": "https://www.youtube.com/watch?v=rp3xVaQCAZ4",
+      "direct": true,
+      "recording_id": "a506b25f-9d4a-424d-8b9a-ad51d9b261bd",
+      "source_ids": [
+        "s_yt_search",
+        "s_mb_rgs"
+      ],
+      "status": "não_verificado"
+    }
+  ],
+  "sources": [
+    {
+      "id": "s_mb_artist",
+      "url": "https://musicbrainz.org/artist/d2db1078-c170-4e22-b261-14f3ad60a690",
+      "title": "MusicBrainz: Devo (Artist)",
+      "type": "base_discografica",
+      "consulted_on": "2026-11-24",
+      "status": "consultada"
+    },
+    {
+      "id": "s_mb_rgs",
+      "url": "https://musicbrainz.org/ws/2/release-group?artist=d2db1078-c170-4e22-b261-14f3ad60a690",
+      "title": "MusicBrainz API: Devo Release Groups & Tracklists",
+      "type": "base_discografica",
+      "consulted_on": "2026-11-24",
+      "status": "consultada"
+    },
+    {
+      "id": "s_wiki_devo",
+      "url": "https://en.wikipedia.org/wiki/Devo",
+      "title": "Wikipedia: Devo",
+      "type": "enciclopedia",
+      "consulted_on": "2026-11-24",
+      "status": "consultada"
+    },
+    {
+      "id": "s_wiki_discog",
+      "url": "https://en.wikipedia.org/wiki/Devo_discography",
+      "title": "Wikipedia: Devo discography",
+      "type": "enciclopedia",
+      "consulted_on": "2026-11-24",
+      "status": "consultada"
+    },
+    {
+      "id": "s_clubdevo",
+      "url": "https://clubdevo.com/",
+      "title": "Club Devo — Official Website",
+      "type": "oficial",
+      "consulted_on": "2026-11-24",
+      "status": "consultada"
+    },
+    {
+      "id": "s_discogs",
+      "url": "https://www.discogs.com/artist/12834-Devo",
+      "title": "Discogs: Devo",
+      "type": "base_discografica",
+      "consulted_on": "2026-11-24",
+      "status": "consultada"
+    },
+    {
+      "id": "s_yt_search",
+      "url": "https://www.youtube.com/results?search_query=Devo",
+      "title": "YouTube: Resultados de busca para faixas do Devo",
+      "type": "plataforma_midia",
+      "consulted_on": "2026-11-24",
+      "status": "consultada"
+    }
+  ],
+  "lyrics": [
+    {
+      "id": "lyr_1",
+      "title": "Whip It",
+      "url": "https://genius.com/Devo-whip-it-lyrics",
+      "license_status": "desconhecido",
+      "source_ids": [
+        "s_wiki_discog"
+      ]
+    },
+    {
+      "id": "lyr_2",
+      "title": "Jocko Homo",
+      "url": "https://genius.com/Devo-jocko-homo-lyrics",
+      "license_status": "desconhecido",
+      "source_ids": [
+        "s_wiki_discog"
+      ]
+    },
+    {
+      "id": "lyr_3",
+      "title": "Freedom of Choice",
+      "url": "https://genius.com/Devo-freedom-of-choice-lyrics",
+      "license_status": "desconhecido",
+      "source_ids": [
+        "s_wiki_discog"
+      ]
+    }
+  ],
+  "timeline": [
+    {
+      "year": 1973,
+      "title": "Formação na Kent State University",
+      "detail": "Gerald Casale, Mark Mothersbaugh e Bob Lewis formam o Devo em Akron/Kent, Ohio."
+    },
+    {
+      "year": 1978,
+      "title": "Álbum de estreia produzido por Brian Eno",
+      "detail": "Lançamento de Q: Are We Not Men? A: We Are Devo! pela Warner Bros."
+    },
+    {
+      "year": 1980,
+      "title": "Freedom of Choice e Whip It",
+      "detail": "Maior sucesso comercial da banda, alcançando platina nos EUA."
+    },
+    {
+      "year": 1991,
+      "title": "Hiato da banda",
+      "detail": "Encerramento temporário das atividades após Smooth Noodle Maps."
+    },
+    {
+      "year": 1996,
+      "title": "Retorno com Josh Freese",
+      "detail": "Reunião para turnês e projetos multimídia."
+    },
+    {
+      "year": 2010,
+      "title": "Something for Everybody",
+      "detail": "Primeiro álbum de estúdio em 20 anos."
+    },
+    {
+      "year": 2014,
+      "title": "Falecimento de Bob Casale (Bob 2)",
+      "detail": "Josh Hager assume guitarra base e teclados."
+    },
+    {
+      "year": 2023,
+      "title": "50 Years of De-Evolution",
+      "detail": "Lançamento comemorativo dos 50 anos da banda."
+    }
+  ],
+  "limitations": [
+    "Links diretos do YouTube obtidos por busca automatizada sem verificação manual de reprodução/disponibilidade regional.",
+    "Créditos em nível de faixa atribuídos aos membros nucleares da respectiva era com base nos álbuns oficiais do MusicBrainz.",
+    "Letras integrais protegidas não são distribuídas; apenas links externos com licença marcada como desconhecida."
+  ]
+}</script>
+  <script>
+    const DB = JSON.parse(document.getElementById("banco-data").textContent);
+    const peopleMap = Object.fromEntries(DB.people.map(p => [p.id, p]));
+    const projMap = Object.fromEntries(DB.projects.map(p => [p.id, p]));
+
+    document.getElementById("cutoff-label").textContent = `Data de corte: ${DB.cutoff} · ${DB.people.length} pessoas · ${DB.relations.length} relações · ${DB.links.length} links diretos`;
+
+    // Tabs
+    const tabs = document.querySelectorAll(".tab-btn");
+    const panels = document.querySelectorAll(".panel");
+    function activateTab(name) {
+      tabs.forEach(t => t.setAttribute("aria-selected", t.dataset.tab === name ? "true" : "false"));
+      panels.forEach(p => p.classList.toggle("active", p.id === "panel-" + name));
+    }
+    tabs.forEach(t => t.addEventListener("click", () => activateTab(t.dataset.tab)));
+
+    // Overview metrics
+    const metrics = [
+      { lbl: "Pessoas", val: DB.people.length },
+      { lbl: "Projetos / Objetos", val: DB.projects.length },
+      { lbl: "Relações Confirmadas", val: DB.relations.filter(r => r.status === "confirmado").length },
+      { lbl: "Lançamentos", val: DB.releases.length },
+      { lbl: "Links Diretos Únicos", val: DB.links.length },
+      { lbl: "Fontes Consultadas", val: DB.sources.length }
+    ];
+    document.getElementById("metrics-grid").innerHTML = metrics.map(m =>
+      `<div class="card"><div class="metric-val">${m.val}</div><div class="metric-lbl">${m.lbl}</div></div>`
+    ).join("");
+
+    document.getElementById("limitations-list").innerHTML = (DB.limitations || []).map(l => `<li>${l}</li>`).join("");
+
+    // Filters
+    const fPerson = document.getElementById("f-person");
+    const fGrain = document.getElementById("f-grain");
+    const fStatus = document.getElementById("f-status");
+    const fSearch = document.getElementById("f-search");
+
+    DB.people.forEach(p => fPerson.add(new Option(p.name, p.id)));
+    [...new Set(DB.relations.map(r => r.grain))].forEach(g => fGrain.add(new Option(g, g)));
+    [...new Set(DB.relations.map(r => r.status))].forEach(s => fStatus.add(new Option(s, s)));
+
+    function renderRelations(yearFilter = null) {
+      const q = fSearch.value.trim().toLowerCase();
+      const pid = fPerson.value;
+      const gr = fGrain.value;
+      const st = fStatus.value;
+
+      const filtered = DB.relations.filter(r => {
+        if (pid && r.person_id !== pid) return false;
+        if (gr && r.grain !== gr) return false;
+        if (st && r.status !== st) return false;
+        if (yearFilter !== null && (r.start > yearFilter || (r.end && r.end < yearFilter))) return false;
+        if (q) {
+          const pName = (peopleMap[r.person_id]?.name || "").toLowerCase();
+          const prName = (projMap[r.project_id]?.name || "").toLowerCase();
+          const inst = (r.instrument || "").toLowerCase();
+          if (!pName.includes(q) && !prName.includes(q) && !inst.includes(q)) return false;
+        }
+        return true;
+      });
+
+      document.getElementById("rel-count").textContent = `Exibindo ${filtered.length} de ${DB.relations.length} relações`;
+      const tbody = document.getElementById("rel-tbody");
+      const wrap = document.getElementById("rel-table-wrap");
+      const empty = document.getElementById("rel-empty");
+
+      if (filtered.length === 0) {
+        wrap.style.display = "none";
+        empty.style.display = "block";
+      } else {
+        wrap.style.display = "block";
+        empty.style.display = "none";
+        tbody.innerHTML = filtered.slice(0, 200).map(r => `
+          <tr>
+            <td>${peopleMap[r.person_id]?.name || r.person_id}</td>
+            <td>${projMap[r.project_id]?.name || r.project_id}</td>
+            <td>${r.kind}</td>
+            <td><span class="badge">${r.grain}</span></td>
+            <td>${r.instrument || "—"}</td>
+            <td>${r.start ?? "?"}–${r.end ?? "atual"}</td>
+            <td><span class="badge ${r.status === 'confirmado' ? 'badge-ok' : 'badge-warn'}">${r.status}</span></td>
+          </tr>
+        `).join("");
+      }
+    }
+
+    [fPerson, fGrain, fStatus].forEach(el => el.addEventListener("change", () => renderRelations()));
+    fSearch.addEventListener("input", () => renderRelations());
+    document.getElementById("f-clear").addEventListener("click", () => {
+      fPerson.value = ""; fGrain.value = ""; fStatus.value = ""; fSearch.value = "";
+      renderRelations();
+    });
+    renderRelations();
+
+    // People
+    document.getElementById("people-grid").innerHTML = DB.people.map(p => `
+      <div class="card">
+        <h3>${p.name}</h3>
+        <div class="subtitle">${p.membership} · ${(p.roles || []).join(", ")}</div>
+        <p style="font-size:0.88rem;margin:0.5rem 0 0;">${p.bio}</p>
+      </div>
+    `).join("");
+
+    // Releases
+    document.getElementById("releases-grid").innerHTML = DB.releases.map(r => `
+      <div class="card">
+        <h3>${r.title} (${r.year})</h3>
+        <div class="subtitle">${r.kind} · ${r.tracks.length} faixas</div>
+        <ol style="font-size:0.82rem;padding-left:1.2rem;margin:0.5rem 0 0;">
+          ${r.tracks.slice(0, 6).map(t => `<li>${t}</li>`).join("")}
+          ${r.tracks.length > 6 ? `<li><em>+${r.tracks.length - 6} faixas</em></li>` : ""}
+        </ol>
+      </div>
+    `).join("");
+
+    // Timeline
+    document.getElementById("timeline-list").innerHTML = (DB.timeline || []).map(t => `
+      <div class="timeline-item" tabindex="0" data-year="${t.year}">
+        <strong>${t.year} — ${t.title}</strong>
+        <div class="subtitle">${t.detail}</div>
+      </div>
+    `).join("");
+    document.querySelectorAll(".timeline-item").forEach(el => {
+      el.addEventListener("click", () => {
+        activateTab("relations");
+        renderRelations(parseInt(el.dataset.year, 10));
+      });
+    });
+
+    // Network SVG (project-level relations)
+    const svg = document.getElementById("network-svg");
+    const projNodes = DB.projects.filter(p => p.kind !== "álbum" && p.kind !== "faixa");
+    const pplNodes = DB.people.slice(0, 12);
+    const nodes = [
+      ...pplNodes.map((p, i) => ({ id: p.id, label: p.name, type: "person", x: 140, y: 30 + i * 32 })),
+      ...projNodes.map((p, i) => ({ id: p.id, label: p.name, type: "project", x: 600, y: 40 + i * 36 }))
+    ];
+    const nodeMap = Object.fromEntries(nodes.map(n => [n.id, n]));
+    const edges = DB.relations.filter(r => r.grain === "projeto" && nodeMap[r.person_id] && nodeMap[r.project_id]);
+
+    svg.innerHTML = [
+      ...edges.map(e => `<line x1="${nodeMap[e.person_id].x}" y1="${nodeMap[e.person_id].y}" x2="${nodeMap[e.project_id].x}" y2="${nodeMap[e.project_id].y}" stroke="#475569" stroke-width="1.5" />`),
+      ...nodes.map(n => `
+        <g class="net-node" data-id="${n.id}" data-type="${n.type}" style="cursor:pointer;">
+          <circle cx="${n.x}" cy="${n.y}" r="8" fill="${n.type === 'person' ? '#ef4444' : '#facc15'}" />
+          <text x="${n.type === 'person' ? n.x - 14 : n.x + 14}" y="${n.y + 4}" fill="#f1f5f9" font-size="11" text-anchor="${n.type === 'person' ? 'end' : 'start'}">${n.label}</text>
+        </g>
+      `)
+    ].join("");
+
+    svg.querySelectorAll(".net-node").forEach(el => {
+      el.addEventListener("click", () => {
+        const id = el.dataset.id;
+        const n = nodeMap[id];
+        document.getElementById("network-info").innerHTML = `<strong>${n.label}</strong> (${n.type}) — <button class="btn-sec" onclick="activateTab('relations')">Ver relações</button>`;
+        if (n.type === "person") { fPerson.value = id; renderRelations(); }
+      });
+    });
+
+    // Sources & Links
+    document.getElementById("sources-tbody").innerHTML = DB.sources.map(s => `
+      <tr><td>${s.id}</td><td><a href="${s.url}" target="_blank" rel="noopener">${s.title}</a></td><td>${s.type}</td><td>${s.consulted_on}</td><td><span class="badge badge-ok">${s.status}</span></td></tr>
+    `).join("");
+
+    document.getElementById("links-tbody").innerHTML = DB.links.map(l => `
+      <tr><td>${l.title}</td><td><code>${l.recording_id}</code></td><td><a href="${l.url}" target="_blank" rel="noopener">${l.url}</a></td><td><span class="badge badge-warn">${l.status}</span></td></tr>
+    `).join("");
+
+    // Exports
+    function downloadFile(filename, content, mime) {
+      const blob = new Blob([content], { type: mime });
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = filename;
+      a.click();
+    }
+    function toCSV(rows) {
+      if (!rows.length) return "";
+      const keys = Object.keys(rows[0]);
+      const esc = v => {
+        let s = Array.isArray(v) || (v && typeof v === "object") ? JSON.stringify(v) : (v ?? "").toString();
+        if (s && ["=", "+", "-", "@"].includes(s[0])) s = "'" + s;
+        return `"${s.replace(/"/g, '""')}"`;
+      };
+      return [keys.join(","), ...rows.map(r => keys.map(k => esc(r[k])).join(","))].join("\n");
+    }
+    document.getElementById("dl-json").addEventListener("click", () => downloadFile("banco.json", JSON.stringify(DB, null, 2), "application/json"));
+    document.getElementById("dl-rel-csv").addEventListener("click", () => downloadFile("relations.csv", toCSV(DB.relations), "text/csv;charset=utf-8"));
+    document.getElementById("dl-people-csv").addEventListener("click", () => downloadFile("people.csv", toCSV(DB.people), "text/csv;charset=utf-8"));
+    document.getElementById("dl-links-csv").addEventListener("click", () => downloadFile("links.csv", toCSV(DB.links), "text/csv;charset=utf-8"));
+  </script>
+</body>
+</html>

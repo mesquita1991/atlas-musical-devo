@@ -1,0 +1,129 @@
+id,name,kind
+proj_devo,Devo,banda
+proj_mutato,Mutato Muzika,produtora
+proj_jihad,Jihad Jerry & the Evildoers,solo
+proj_wipeouters,The Wipeouters,projeto_paralelo
+proj_vandals,The Vandals,banda
+proj_apc,A Perfect Circle,banda
+proj_sparks,Sparks,banda
+proj_gleaming,Gleaming Spires,banda
+proj_ponty,Jean-Luc Ponty Band,banda
+proj_elevator,The Elevator Drops,banda
+proj_alb_1,Q: Are We Not Men? A: We Are Devo!,álbum
+proj_trk_1_1,Uncontrollable Urge (Q: Are We Not Men? A: We Are Devo!),faixa
+proj_trk_1_2,(I Can’t Get No) Satisfaction (Q: Are We Not Men? A: We Are Devo!),faixa
+proj_trk_1_3,Praying Hands (Q: Are We Not Men? A: We Are Devo!),faixa
+proj_trk_1_4,Space Junk (Q: Are We Not Men? A: We Are Devo!),faixa
+proj_trk_1_5,Mongoloid (Q: Are We Not Men? A: We Are Devo!),faixa
+proj_trk_1_6,Jocko Homo (Q: Are We Not Men? A: We Are Devo!),faixa
+proj_trk_1_7,Too Much Paranoias (Q: Are We Not Men? A: We Are Devo!),faixa
+proj_trk_1_8,Gut Feeling / (Slap Your Mammy) (Q: Are We Not Men? A: We Are Devo!),faixa
+proj_trk_1_9,Come Back Jonee (Q: Are We Not Men? A: We Are Devo!),faixa
+proj_trk_1_10,Sloppy (I Saw My Baby Gettin’) (Q: Are We Not Men? A: We Are Devo!),faixa
+proj_trk_1_11,Shrivel‐Up (Q: Are We Not Men? A: We Are Devo!),faixa
+proj_alb_2,Duty Now for the Future,álbum
+proj_trk_2_1,Devo Corporate Anthem (Duty Now for the Future),faixa
+proj_trk_2_2,Clockout (Duty Now for the Future),faixa
+proj_trk_2_3,Timing X (Duty Now for the Future),faixa
+proj_trk_2_4,Wiggly World (Duty Now for the Future),faixa
+proj_trk_2_5,Blockhead (Duty Now for the Future),faixa
+proj_trk_2_6,Strange Pursuit (Duty Now for the Future),faixa
+proj_trk_2_7,S.I.B. (Swelling Itching Brain) (Duty Now for the Future),faixa
+proj_trk_2_8,Triumph of the Will (Duty Now for the Future),faixa
+proj_trk_2_9,The Day My Baby Gave Me a Surprize (Duty Now for the Future),faixa
+proj_trk_2_10,Pink Pussycat (Duty Now for the Future),faixa
+proj_trk_2_11,Secret Agent Man (Duty Now for the Future),faixa
+proj_trk_2_12,Smart Patrol / Mr. DNA (Duty Now for the Future),faixa
+proj_trk_2_13,Red Eye (Duty Now for the Future),faixa
+proj_alb_3,Freedom of Choice,álbum
+proj_trk_3_1,Girl U Want (Freedom of Choice),faixa
+proj_trk_3_2,It’s Not Right (Freedom of Choice),faixa
+proj_trk_3_3,Whip It (Freedom of Choice),faixa
+proj_trk_3_4,Snowball (Freedom of Choice),faixa
+proj_trk_3_5,Ton o’ Luv (Freedom of Choice),faixa
+proj_trk_3_6,Freedom of Choice (Freedom of Choice),faixa
+proj_trk_3_7,Gates of Steel (Freedom of Choice),faixa
+proj_trk_3_8,Cold War (Freedom of Choice),faixa
+proj_trk_3_9,Don’t You Know (Freedom of Choice),faixa
+proj_trk_3_10,That’s Pep! (Freedom of Choice),faixa
+proj_trk_3_11,Mr. B’s Ballroom (Freedom of Choice),faixa
+proj_trk_3_12,Planet Earth (Freedom of Choice),faixa
+proj_alb_4,New Traditionalists,álbum
+proj_trk_4_1,Through Being Cool (New Traditionalists),faixa
+proj_trk_4_2,Jerkin’ Back ’n’ Forth (New Traditionalists),faixa
+proj_trk_4_3,Pity You (New Traditionalists),faixa
+proj_trk_4_4,Soft Things (New Traditionalists),faixa
+proj_trk_4_5,Going Under (New Traditionalists),faixa
+proj_trk_4_6,Race of Doom (New Traditionalists),faixa
+proj_trk_4_7,Love Without Anger (New Traditionalists),faixa
+proj_trk_4_8,The Super Thing (New Traditionalists),faixa
+proj_trk_4_9,Beautiful World (New Traditionalists),faixa
+proj_trk_4_10,Enough Said (New Traditionalists),faixa
+proj_trk_4_11,Working in the Coal Mine (New Traditionalists),faixa
+proj_trk_4_12,Working in the Coal Mine (New Traditionalists),faixa
+proj_alb_5,"Oh, No! It's Devo",álbum
+proj_trk_5_1,"Time Out for Fun (Oh, No! It's Devo)",faixa
+proj_trk_5_2,"Peek·A·Boo! (Oh, No! It's Devo)",faixa
+proj_trk_5_3,"Out of Sync (Oh, No! It's Devo)",faixa
+proj_trk_5_4,"Explosions (Oh, No! It's Devo)",faixa
+proj_trk_5_5,"That’s Good (Oh, No! It's Devo)",faixa
+proj_trk_5_6,"Patterns (Oh, No! It's Devo)",faixa
+proj_trk_5_7,"Big Mess (Oh, No! It's Devo)",faixa
+proj_trk_5_8,"Speed Racer (Oh, No! It's Devo)",faixa
+proj_trk_5_9,"What I Must Do (Oh, No! It's Devo)",faixa
+proj_trk_5_10,"I Desire (Oh, No! It's Devo)",faixa
+proj_trk_5_11,"Deep Sleep (Oh, No! It's Devo)",faixa
+proj_alb_6,Shout,álbum
+proj_trk_6_1,Shout (Shout),faixa
+proj_trk_6_2,The Satisfied Mind (Shout),faixa
+proj_trk_6_3,Don’t Rescue Me (Shout),faixa
+proj_trk_6_4,The 4th Dimension (Shout),faixa
+proj_trk_6_5,C’mon (Shout),faixa
+proj_trk_6_6,Here to Go (Shout),faixa
+proj_trk_6_7,Jurisdiction of Love (Shout),faixa
+proj_trk_6_8,Puppet Boy (Shout),faixa
+proj_trk_6_9,Please Please (Shout),faixa
+proj_trk_6_10,Are You Experienced? (Shout),faixa
+proj_alb_7,Total Devo,álbum
+proj_trk_7_1,Baby Doll (Total Devo),faixa
+proj_trk_7_2,Disco Dancer (Total Devo),faixa
+proj_trk_7_3,Some Things Never Change (Total Devo),faixa
+proj_trk_7_4,Plain Truth (Total Devo),faixa
+proj_trk_7_5,Happy Guy (Total Devo),faixa
+proj_trk_7_6,Don't Be Cruel (Total Devo),faixa
+proj_trk_7_7,The Shadow (Total Devo),faixa
+proj_trk_7_8,I'd Cry If You Died (Total Devo),faixa
+proj_trk_7_9,Agitated (Total Devo),faixa
+proj_trk_7_10,Man Turned Inside Out (Total Devo),faixa
+proj_trk_7_11,Sexi Luv (Total Devo),faixa
+proj_trk_7_12,Blow Up (Total Devo),faixa
+proj_trk_7_13,Some Things Never Change (cassette version) (Total Devo),faixa
+proj_alb_8,Smooth Noodle Maps,álbum
+proj_trk_8_1,Stuck in a Loop (Smooth Noodle Maps),faixa
+proj_trk_8_2,Post Post‐Modern Man (Smooth Noodle Maps),faixa
+proj_trk_8_3,When We Do It (Smooth Noodle Maps),faixa
+proj_trk_8_4,Spin the Wheel (Smooth Noodle Maps),faixa
+proj_trk_8_5,Morning Dew (Smooth Noodle Maps),faixa
+proj_trk_8_6,A Change Is Gonna Cum (Smooth Noodle Maps),faixa
+proj_trk_8_7,The Big Picture (Smooth Noodle Maps),faixa
+proj_trk_8_8,Pink Jazz Trancers (Smooth Noodle Maps),faixa
+proj_trk_8_9,Jimmy (Smooth Noodle Maps),faixa
+proj_trk_8_10,DEVO Has Feelings Too (Smooth Noodle Maps),faixa
+proj_trk_8_11,Dawghaus (Smooth Noodle Maps),faixa
+proj_alb_9,Something for Everybody,álbum
+proj_trk_9_1,Fresh (Something for Everybody),faixa
+proj_trk_9_2,What We Do (Something for Everybody),faixa
+proj_trk_9_3,Please Baby Please (Something for Everybody),faixa
+proj_trk_9_4,Don’t Shoot (I’m a Man) (Something for Everybody),faixa
+proj_trk_9_5,Mind Games (Something for Everybody),faixa
+proj_trk_9_6,Human Rocket (Something for Everybody),faixa
+proj_trk_9_7,Sumthin’ (Something for Everybody),faixa
+proj_trk_9_8,Step Up (Something for Everybody),faixa
+proj_trk_9_9,Cameo (Something for Everybody),faixa
+proj_trk_9_10,Later Is Now (Something for Everybody),faixa
+proj_trk_9_11,No Place Like Home (Something for Everybody),faixa
+proj_trk_9_12,March On (Something for Everybody),faixa
+proj_trk_9_13,Watch Us Work It (Something for Everybody),faixa
+proj_trk_9_14,Signal Ready (Something for Everybody),faixa
+proj_trk_9_15,Let’s Get to It (Something for Everybody),faixa
+proj_trk_9_16,Knock Boots (Something for Everybody),faixa
